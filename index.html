@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kerwin's Advanced Quantum Mechanics | HUST Physics</title>
+    
+    <!-- 字体与公式渲染引擎 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* =========================================
+           1. 全局样式与变量 (你可以一键改颜色)
+           ========================================= */
+        :root {
+            --primary-blue:  #1a237e;    /* 侧边栏/标题主色 */
+            --hust-red: #a52a2a;        /* 重点内容颜色 */
+            --bg-body: #f4f7f9;         /* 全局背景 */
+            --sidebar-width: 260px;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg-body); margin: 0; display: flex; }
+
+        /* =========================================
+           2. 侧边栏样式 (折叠菜单)
+           ========================================= */
+        .sidebar {
+            width: var(--sidebar-width); height: 100vh;
+            background: #263238; color: #eceff1;
+            position: fixed; overflow-y: auto; z-index: 1000;
+        }
+        .sidebar-header { padding: 30px 20px; background: var(--primary-blue); font-weight: bold; font-size: 1.2rem; text-align: center; }
+        
+        .category { border-bottom: 1px solid #37474f; }
+        .category-title {
+            padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            font-weight: 600; background: #263238; transition: 0.3s;
+        }
+        .category-title:hover { background: #37474f; }
+        .category-content { display: none; background: #1c252a; padding: 5px 0; }
+        .category.active .category-content { display: block; } /* 点击后展开 */
+        .category.active .arrow { transform: rotate(90deg); }
+
+        .sidebar a { display: block; padding: 10px 35px; color: #b0bec5; text-decoration: none; font-size: 0.9rem; }
+        .sidebar a:hover { color: #fff; background: #37474f; }
+        .arrow { transition: 0.3s; font-size: 0.7rem; }
+
+        /* =========================================
+           3. 主内容区与卡片模块
+           ========================================= */
+        .main-container { margin-left: var(--sidebar-width); width: 100%; padding: 40px; box-sizing: border-box; }
+        
+        /* 卡片模块：每道题一个 card */
+        .card {
+            background: #fff; padding: 40px; margin-bottom: 40px;
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 900px; margin-left: auto; margin-right: auto;
+        }
+
+        h2 { font-family: 'Noto Serif SC', serif; color: var(--primary-blue); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: var(--hust-red); border-left: 4px solid var(--hust-red); padding-left: 12px; margin-top: 30px; }
+
+        /* 题目描述框 */
+        .problem-box { background: #fffbe6; border: 1px solid #ffe58f; padding: 20px; border-radius: 8px; margin: 20px 0; font-family: 'Noto Serif SC', serif; line-height: 1.8; }
+        
+        /* 知识点强调框 */
+        .kp-box { background: #e3f2fd; border-left: 5px solid #2196f3; padding: 15px; margin: 25px 0; border-radius: 0 8px 8px 0; font-size: 0.95rem; }
+
+        footer { text-align: center; color: #999; padding: 40px; }
+        @media (max-width: 1000px) { .sidebar { display: none; } .main-container { margin-left: 0; } }
+    </style>
+</head>
+<body>
+
+<!-- 侧边栏 -->
+<aside class="sidebar">
+    <div class="sidebar-header">Per aspera ad astra </div>
+
+    <!-- 分类：量子动力学 -->
+    <div class="category">
+    <div class="category-title" onclick="toggleCategory(this)">
+        量子动力学 <span class="arrow">▶</span>
+    </div>
+    <div class="category-content">
+        <a href="#dyn-01">概率流密度与电磁场中的规范变换</a>
+        <a href="#dyn-02">海森堡绘景与简并参量放大过程</a>
+        <a href="#dyn-03">相互作用绘景、Dyson 级数与有效哈密顿量</a>
+    </div>
+
+    <!-- 分类：密度矩阵 -->
+    <div class="category ">
+    <div class="category-title" onclick="toggleCategory(this)">
+        密度矩阵 <span class="arrow">▶</span>
+    </div>
+    <div class="category-content">
+        <a href="#density-01">量子系综、热平衡密度矩阵与自旋 1/2 体系</a>
+        <a href="#density-02">自旋 1/2 正则系综的磁化率</a>
+        <a href="#dyn-03">呃呃</a>
+    </div>
+</div>
+
+</aside>
+
+<!-- 内容区 -->
+<!-- 主内容区开始 -->
+<main class="main-container">
+<section id="dyn-01">
+        <div class="card">
+            <h2>概率流密度与电磁场中的规范变换</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+                一. 考虑一个处于三维势场中的质量为 $m$ 的无自旋粒子，其哈密顿算符为 $H = \frac{-\hbar^2}{2m}\nabla^2 + V(\mathbf{r})$，其状态用波函数 $\psi(\mathbf{r}, t)$ 描述。
+                <p><strong>a.</strong> 试使用波函数 $\psi(\mathbf{r}, t)$ 写出在时刻 $t$ 粒子在全空间中的概率密度函数 $\rho(\mathbf{r}, t)$，再利用粒子数守恒公式 $\frac{\partial \rho}{\partial t} + \nabla \cdot \mathbf{J} = 0$，求出概率流密度矢量场 $\mathbf{J}(\mathbf{r}, t)$。（4 分）</p>
+                <p><strong>b.</strong> 设 $\xi(\mathbf{r}, t)$ 是 $\psi(\mathbf{r}, t)$ 的辐角，即 $\psi(\mathbf{r}, t) = |\psi(\mathbf{r}, t)|\exp[i\xi(\mathbf{r}, t)]$，试问 $\xi(\mathbf{r}, t)$ 所对应的经典物理量是什么？用 $\rho(\mathbf{r}, t)$ 和 $\xi(\mathbf{r}, t)$ 表示 $\mathbf{J}(\mathbf{r}, t)$。（4 分）</p>
+                <p><strong>c.</strong> 由此证明，如果有两个波函数 $\psi_1(\mathbf{r}, t)$ 和 $\psi_2(\mathbf{r}, t)$ 给出了相同的概率密度函数 $\rho(\mathbf{r}, t)$ 和概率流密度矢量场 $\mathbf{J}(\mathbf{r}, t)$，那么它们之间最多相差一个与时间和空间都无关的常数相位因子。这即意味着概率密度和概率流密度包含有波函数的全部物理信息。（3 分）</p>
+                <p><strong>d.</strong> 反过来，假设 $\rho(\mathbf{r})$ 是一个已知的且处处为正的标量函数，且 $\int d^3\mathbf{r} \rho(\mathbf{r}) = 1$，而 $\mathbf{J}(\mathbf{r})$ 是一个已知的矢量场函数，且满足 $\nabla \times [\mathbf{J}(\mathbf{r}) / \rho(\mathbf{r})] = 0$。试构造这样一个波函数，它所给出的概率密度函数和概率流密度矢量场恰好分别是 $\rho(\mathbf{r})$ 和 $\mathbf{J}(\mathbf{r})$。（3 分）</p>
+                <p><strong>e.</strong> 假设这个粒子具有电量 $e$，现再给这个粒子加上外加磁场 $\mathbf{B}(\mathbf{r})$，取定 $\mathbf{B}(\mathbf{r})$ 所对应的矢势 $\mathbf{A}(\mathbf{r})$，试写出该粒子的波函数 $\psi(\mathbf{r}, t)$ 所满足的薛定谔方程，和现在粒子的概率流密度矢量场 $\mathbf{J}(\mathbf{r}, t)$ 的表达形式（基于波函数 $\psi(\mathbf{r}, t)$ 和基于 $\rho(\mathbf{r}, t)$ 和 $\xi(\mathbf{r}, t)$ 的表达形式都需要给出）。（4 分）</p>
+                <p><strong>f.</strong> 考虑规范变换 $\mathbf{A}'(\mathbf{r}) = \mathbf{A}(\mathbf{r}) + \nabla f(\mathbf{r})$，那么，应对 $\psi(\mathbf{r}, t)$ 作何种相应的变换得到 $\psi'(\mathbf{r}, t)$，才能使得变换前后的这两个波函数表达相同的物理，且 $\psi'(\mathbf{r}, t)$ 满足新的规范下的薛定谔方程？（2 分）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+            <!-- 答案区域开始 -->
+            <h3>(a) 概率密度与概率流密度推导</h3>
+            <p>概率密度函数为：$\rho(\vec{r}, t) = \psi^*(\vec{r}, t)\psi(\vec{r}, t)$</p>
+            <p>对其两边对时间求导：</p>
+            $$
+            \begin{aligned}
+            \frac{\partial}{\partial t}\rho(\vec{r}, t) &= \left[\frac{\partial}{\partial t}\psi^*(\vec{r}, t)\right]\psi(\vec{r}, t) + \psi^*(\vec{r}, t)\left[\frac{\partial}{\partial t}\psi(\vec{r}, t)\right]
+            \end{aligned}
+            $$
+            <p>代入薛定谔方程及其共轭方程：</p>
+            $$
+            \begin{cases}
+            i\hbar\frac{\partial}{\partial t}\psi(\vec{r}, t) = -\frac{\hbar^2}{2m}\nabla^2\psi(\vec{r}, t) + V(\vec{r})\psi(\vec{r}, t) \\
+            -i\hbar\frac{\partial}{\partial t}\psi^*(\vec{r}, t) = -\frac{\hbar^2}{2m}\nabla^2\psi^*(\vec{r}, t) + V(\vec{r})\psi^*(\vec{r}, t)
+            \end{cases}
+            $$
+            <p>可得：</p>
+            $$
+            \begin{aligned}
+            \frac{\partial}{\partial t}\rho(\vec{r}, t) &= -\frac{1}{i\hbar}\left[-\frac{\hbar^2}{2m}\nabla^2\psi^* + V(\vec{r})\psi^*\right]\psi + \frac{1}{i\hbar}\psi^*\left[-\frac{\hbar^2}{2m}\nabla^2\psi + V(\vec{r})\psi\right] \\
+            &= \left[\frac{\hbar}{2mi}\nabla^2\psi^*\right]\psi - \frac{1}{i\hbar}V(\vec{r})\psi^*\psi - \frac{\hbar}{2mi}\psi^*\nabla^2\psi + \frac{1}{i\hbar}\psi^*V(\vec{r})\psi \\
+            &= \frac{\hbar}{2mi} \nabla \cdot [\psi\nabla\psi^* - \psi^*\nabla\psi] \\
+            &= -\frac{i\hbar}{2m} \nabla \cdot [\psi\nabla\psi^* - \psi^*\nabla\psi]
+            \end{aligned}
+            $$
+            <p>对比粒子数守恒公式 $\frac{\partial \rho}{\partial t} + \nabla \cdot \vec{J} = 0$，可得概率流密度矢量场：</p>
+            $$ \vec{J}(\vec{r}, t) = \frac{i\hbar}{2m} [\psi(\vec{r}, t)\nabla\psi^*(\vec{r}, t) - \psi^*(\vec{r}, t)\nabla\psi(\vec{r}, t)] $$
+
+            <h3>(b) 概率流的极坐标表示与经典对应</h3>
+            <p>令 $\psi(\vec{r}, t) = |\psi(\vec{r}, t)|\exp[i\xi(\vec{r}, t)]$，则 $\psi^*(\vec{r}, t) = |\psi(\vec{r}, t)|\exp[-i\xi(\vec{r}, t)]$。</p>
+            $$ \frac{\psi^*}{\psi} = \exp(-2i\xi) \implies \ln\left(\frac{\psi^*}{\psi}\right) = -2i\xi(\vec{r}, t) $$
+            <p>将 $\vec{J}$ 的表达式变形：</p>
+            $$
+            \begin{aligned}
+            \vec{J}(\vec{r}, t) &= \frac{i\hbar}{2m}\psi\psi^* \left[ \frac{\nabla\psi^*}{\psi^*} - \frac{\nabla\psi}{\psi} \right] \\
+            &= \frac{i\hbar}{2m}\rho(\vec{r}, t) [\nabla \ln\psi^* - \nabla \ln\psi] \\
+            &= \frac{i\hbar}{2m}\rho(\vec{r}, t) \nabla \ln\left(\frac{\psi^*}{\psi}\right) \\
+            &= \frac{i\hbar}{2m}\rho(\vec{r}, t) (-2i)\nabla\xi(\vec{r}, t) \\
+            &= \frac{\hbar}{m}\rho(\vec{r}, t)\nabla\xi(\vec{r}, t)
+            \end{aligned}
+            $$
+            <p><strong>物理意义：</strong> 由于经典力学中流密度 $\vec{J} = \rho \vec{v} = \rho \frac{\vec{p}}{m}$，对比可得 $\vec{p} = \hbar\nabla\xi$。因此 $\hbar\xi(\vec{r}, t)$ 代表经典物理量中的<strong>经典作用量（Action）$S$</strong>。</p>
+
+            <h3>(c) 波函数相位的唯一性证明</h3>
+            <p>已知 $\rho_1 = \rho_2$ 且 $\vec{J}_1 = \vec{J}_2$。由 $\rho$ 相等推知 $|\psi_1| = |\psi_2|$。</p>
+            <p>由 $\vec{J}_1 = \vec{J}_2$ 结合 (b) 的结论推知：</p>
+            $$ \nabla\xi_1(\vec{r}, t) = \nabla\xi_2(\vec{r}, t) \implies \xi_1(\vec{r}, t) = \xi_2(\vec{r}, t) + C(t) $$
+            <p>其中 $\nabla C(t) = 0$，即相差一个与空间无关的相位项。此时 $\psi_1(\vec{r}, t) = \psi_2(\vec{r}, t)e^{-iC(t)}$。现证明 $C$ 与时间无关：</p>
+            <p>将 $\psi_1$ 代入薛定谔方程：</p>
+            $$
+            \begin{aligned}
+            i\hbar\frac{\partial}{\partial t}\left[\psi_2(\vec{r}, t)e^{-iC(t)}\right] &= H[\psi_2(\vec{r}, t)e^{-iC(t)}] \\
+            e^{-iC(t)}i\hbar\frac{\partial \psi_2}{\partial t} - i e^{-iC(t)}i\hbar\psi_2\frac{\partial C(t)}{\partial t} &= H\psi_2(\vec{r}, t)e^{-iC(t)}
+            \end{aligned}
+            $$
+            <p>由于 $\psi_2$ 本身满足薛定谔方程 $i\hbar\frac{\partial \psi_2}{\partial t} = H\psi_2$，两边消去对应项得：</p>
+            $$ \hbar e^{-iC(t)}\psi_2\frac{\partial C(t)}{\partial t} = 0 \implies \frac{\partial C(t)}{\partial t} = 0 $$
+            <p>故 $C$ 是一个此时空皆无关的常数相位因子，证明完毕。</p>
+
+            <h3>(d) 从可观测量构造波函数</h3>
+            <p>由于 $\nabla \times [\vec{J}(\vec{r}) / \rho(\vec{r})] = 0$，结合 (b) 中 $\nabla\xi = \frac{m}{\hbar}\frac{\vec{J}}{\rho}$，保证了积分与路径无关：</p>
+            $$ \xi(\vec{r}, t) = \int_{\vec{r}_0}^{\vec{r}} \frac{m}{\hbar} \frac{\vec{J}(\vec{r}')}{\rho(\vec{r}')} \cdot d\vec{r}' $$
+            <p>因此构造的波函数为：</p>
+            $$ \psi(\vec{r}, t) = \sqrt{\rho(\vec{r})} \exp\left( i \int_{\vec{r}_0}^{\vec{r}} \frac{m}{\hbar} \frac{\vec{J}(\vec{r}')}{\rho(\vec{r}')} \cdot d\vec{r}' \right) $$
+
+            <h3>(e) 电磁场中的薛定谔方程与概率流</h3>
+            <p>加上外加磁场后，哈密顿量变为：$H = \frac{(\hat{\vec{p}} - e\vec{A}(\vec{r}))^2}{2m} + V(\vec{r})$</p>
+            <p>展开动能项（代入 $\hat{\vec{p}} = -i\hbar\nabla$）：</p>
+            $$
+            \begin{aligned}
+            \frac{(\hat{\vec{p}} - e\vec{A})^2}{2m} &= \frac{1}{2m} (-\hbar^2\nabla^2 + e^2\vec{A}^2 + i\hbar e \nabla \cdot \vec{A} + i\hbar e \vec{A} \cdot \nabla)
+            \end{aligned}
+            $$
+            <p>在此取<strong>库仑规范</strong> $\nabla \cdot \vec{A} = 0$，则薛定谔方程为：</p>
+            $$ i\hbar\frac{\partial \psi}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2\psi + \frac{e^2}{2m}\vec{A}^2\psi + \frac{i\hbar e}{m}\vec{A}\cdot\nabla\psi + V\psi $$
+            <p>仿照 (a) 计算 $\frac{\partial \rho}{\partial t}$，抵消势能项和 $\vec{A}^2$ 项后，提取出散度形式：</p>
+            $$ \frac{\partial \rho}{\partial t} + \nabla \cdot \left[ \frac{i\hbar}{2m}(\psi\nabla\psi^* - \psi^*\nabla\psi) - \frac{e}{m}\vec{A}\psi\psi^* \right] = 0 $$
+            <p>基于 $\psi$ 的表达形式为：</p>
+            $$ \vec{J}(\vec{r}, t) = \frac{i\hbar}{2m}[\psi\nabla\psi^* - \psi^*\nabla\psi] - \frac{e}{m}\vec{A}(\vec{r})\psi\psi^* $$
+            <p>基于 $\rho$ 和 $\xi$ 的表达形式为：</p>
+            $$ \vec{J}(\vec{r}, t) = \frac{\hbar}{m}\rho(\vec{r}, t)\nabla\xi(\vec{r}, t) - \frac{e}{m}\vec{A}(\vec{r})\rho(\vec{r}, t) $$
+
+            <h3>(f) 规范变换与波函数的相位补偿</h3>
+            <p>规范变换 $\vec{A}'(\vec{r}) = \vec{A}(\vec{r}) + \nabla f(\vec{r})$。要求物理量保持不变，即 $\rho' = \rho$ 且 $\vec{J}' = \vec{J}$。</p>
+            <p>由 $\rho' = \rho$ 可设 $\psi' = \psi e^{i\theta(\vec{r})}$。令变换前后流密度相等：</p>
+            $$
+            \begin{aligned}
+            \frac{\hbar}{m}\rho\nabla\xi' - \frac{e}{m}\vec{A}'\rho &= \frac{\hbar}{m}\rho\nabla\xi - \frac{e}{m}\vec{A}\rho \\
+            \frac{\hbar}{m}\nabla\xi' - \frac{e}{m}(\vec{A} + \nabla f) &= \frac{\hbar}{m}\nabla\xi - \frac{e}{m}\vec{A} \\
+            \nabla\xi' &= \nabla\xi + \frac{e}{\hbar}\nabla f \implies \xi' = \xi + \frac{e}{\hbar}f
+            \end{aligned}
+            $$
+            <p>因此波函数应作如下变换：</p>
+            $$ \psi'(\vec{r}, t) = \psi(\vec{r}, t) e^{i\frac{e}{\hbar}f(\vec{r})} $$
+            <p><strong>验证新规范下的薛定谔方程：</strong> 定义算符 $\hat{P}' = -i\hbar\nabla - e\vec{A}'$。让其作用于新波函数：</p>
+            $$
+            \begin{aligned}
+            \hat{P}'\psi' &= (-i\hbar\nabla - e\vec{A} - e\nabla f)\left[\psi e^{i\frac{e}{\hbar}f}\right] \\
+            &= -i\hbar(\nabla\psi)e^{i\frac{e}{\hbar}f} - i\hbar\psi\left(i\frac{e}{\hbar}\nabla f\right)e^{i\frac{e}{\hbar}f} - e\vec{A}\psi e^{i\frac{e}{\hbar}f} - e(\nabla f)\psi e^{i\frac{e}{\hbar}f} \\
+            &= e^{i\frac{e}{\hbar}f} (-i\hbar\nabla - e\vec{A})\psi = e^{i\frac{e}{\hbar}f} (\hat{P}\psi)
+            \end{aligned}
+            $$
+            <p>显然，算符平方作用两次有：$\frac{1}{2m}(\hat{P}')^2 \psi' = e^{i\frac{e}{\hbar}f} \left[\frac{1}{2m}\hat{P}^2 \psi\right]$。</p>
+            <p>由于 $\frac{\partial f}{\partial t} = 0$，新方程等式左侧 $i\hbar\frac{\partial \psi'}{\partial t} = e^{i\frac{e}{\hbar}f} i\hbar\frac{\partial \psi}{\partial t}$。左右两边正好同时多出相位因子 $e^{i\frac{e}{\hbar}f}$，约去后即为原薛定谔方程，证毕。</p>
+
+            <div class="kp-box">
+                <strong>Sakurai 重点关注：</strong><br>
+                1. <strong>概率流密度的经典类比：</strong> 波函数的相位梯度 $\nabla\xi$ 对应经典流体力学中的速度场（更准确地说是动量场 $\vec{p}$），这在 WKB 近似和玻姆量子力学解释中具有重要意义。<br>
+                2. <strong>电磁场中的算符替换与规范不变性：</strong> 在电磁场中，动量算符必须进行最小耦合替换 $\hat{\vec{p}} \to \hat{\vec{p}} - \frac{e}{c}\vec{A}$（高斯单位制）或 $-e\vec{A}$（国际单位制）。波函数的规范变换本质上是一个<strong>局域相位变换 (Local Phase Transformation)</strong>，正是这种不变性要求导致了电磁相互作用的存在。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+
+<!-- ⬇️ 模块开始：第二题 ⬇️ -->
+    <section id="dyn-02">
+        <div class="card">
+            <h2>海森堡绘景与简并参量放大过程</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>              
+                <p><strong>a.</strong> 试解释什么是海森堡绘景？考虑一个量子体系，它的哈密顿量 $H$ 不含时，试写出一个薛定谔绘景下的不含时的力学量算符 $A$ 在海森堡绘景下的运动方程，并指出这一方程的经典对应是什么。（5 分）</p>
+                <p><strong>b.</strong> 写出考虑一个单模光场的简并参量放大过程，它可以被哈密顿量 $H = g(aa + a^\dagger a^\dagger)$ 描述，其中 $a$ 和 $a^\dagger$ 是这个单模光场的产生湮灭算符，满足对易关系 $[a, a^\dagger] = 1$。试在海森堡绘景中写出 $a$ 和 $a^\dagger$ 所满足的运动方程，并求解它们。（5 分）</p>
+                <p><strong>c.</strong> 若前述过程中这个单模光场在 $t=0$ 的初始状态是真空态 $|0\rangle$，它对应的平均光子数为 $\langle a^\dagger(0)a(0) \rangle = 0$，试求这一体系中的平均光子数随时间 $t$ 如何变化？（5 分）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+            <!-- 答案区域开始 -->
+            <h3>(a) 海森堡绘景及运动方程</h3>
+            <p><strong>海森堡绘景（Heisenberg Picture）：</strong> 在此绘景下，量子体系的态矢量不随时间演化，而力学量算符承担了所有的量子演化。</p>
+            <p>对于薛定谔绘景下不含时的算符 $\hat{A}$，其在海森堡绘景下的运动方程为：</p>
+            $$ \frac{d\hat{A}_H(t)}{dt} = \frac{1}{i\hbar}[\hat{A}_H(t), \hat{H}] $$
+            <p><strong>经典对应：</strong> 该方程对应于经典哈密顿力学中的泊松括号（Poisson Bracket）演化方程 $\frac{dA}{dt} = \{A, H\}_{PB}$。即量子力学中的对易子对应于经典力学中的泊松括号：$\frac{1}{i\hbar}[\cdot, \cdot] \Longleftrightarrow \{\cdot, \cdot\}_{PB}$。</p>
+
+            <h3>(b) 产生湮灭算符的运动方程与求解</h3>
+            <p>已知哈密顿量 $H = g(aa + a^\dagger a^\dagger)$，为求海森堡方程，先计算对易子 $[a, H]$ 和 $[a^\dagger, H]$：</p>
+            $$
+            \begin{aligned}
+            [a, H] &= g[a, aa] + g[a, a^\dagger a^\dagger] = g[a, a^\dagger a^\dagger] \\
+            &= g([a, a^\dagger]a^\dagger + a^\dagger[a, a^\dagger]) = g(a^\dagger + a^\dagger) = 2g a^\dagger \\
+            [a^\dagger, H] &= g[a^\dagger, aa] + g[a^\dagger, a^\dagger a^\dagger] = g[a^\dagger, aa] \\
+            &= g([a^\dagger, a]a + a[a^\dagger, a]) = g(-a - a) = -2g a
+            \end{aligned}
+            $$
+            <p>代入海森堡运动方程（为书写简便，以下省略下标 $H$）：</p>
+            $$
+            \begin{cases}
+            \frac{d a}{dt} = \frac{1}{i\hbar}[a, H] = \frac{1}{i\hbar}(2ga^\dagger) = -i\frac{2g}{\hbar}a^\dagger & \text{①} \\
+            \frac{d a^\dagger}{dt} = \frac{1}{i\hbar}[a^\dagger, H] = \frac{1}{i\hbar}(-2ga) = i\frac{2g}{\hbar}a & \text{②}
+            \end{cases}
+            $$
+            <p><strong>构造线性组合以解耦：</strong></p>
+            $$
+            \begin{cases}
+            \frac{d}{dt}(a + i a^\dagger) = -i\frac{2g}{\hbar}a^\dagger - \frac{2g}{\hbar}a = -\frac{2g}{\hbar}(a + ia^\dagger) \\
+            \frac{d}{dt}(a - i a^\dagger) = -i\frac{2g}{\hbar}a^\dagger + \frac{2g}{\hbar}a = \frac{2g}{\hbar}(a - ia^\dagger)
+            \end{cases}
+            $$
+            <p>求解上述一阶常微分方程：</p>
+            $$
+            \begin{cases}
+            a(t) + i a^\dagger(t) = (a(0) + i a^\dagger(0)) e^{-\frac{2g}{\hbar}t} \\
+            a(t) - i a^\dagger(t) = (a(0) - i a^\dagger(0)) e^{\frac{2g}{\hbar}t}
+            \end{cases}
+            $$
+            <p>将两式相加与相减，解出 $a(t)$ 和 $a^\dagger(t)$：</p>
+            $$
+            \begin{aligned}
+            a(t) &= \frac{1}{2}(a(0) + i a^\dagger(0))e^{-\frac{2g}{\hbar}t} + \frac{1}{2}(a(0) - i a^\dagger(0))e^{\frac{2g}{\hbar}t} \\
+            a^\dagger(t) &= \frac{1}{2}(a^\dagger(0) - i a(0))e^{-\frac{2g}{\hbar}t} + \frac{1}{2}(a^\dagger(0) + i a(0))e^{\frac{2g}{\hbar}t}
+            \end{aligned}
+            $$
+
+            <h3>(c) 平均光子数随时间的演化</h3>
+            <p>初始状态为真空态 $|0\rangle$，已知 $a(0)|0\rangle = 0$ 以及 $\langle 0|a^\dagger(0) = 0$。我们需要计算 $\langle a^\dagger(t) a(t) \rangle = \langle 0 | a^\dagger(t) a(t) | 0 \rangle$。</p>
+            <p>将 (b) 中的结果相乘展开。注意，任何以 $a(0)$ 结尾或以 $a^\dagger(0)$ 开头的项，在作用于真空态时均会变为 0。因此我们只需关注包含 $a(0)a^\dagger(0)$ 的项，且利用 $[a(0), a^\dagger(0)] = 1 \implies a(0)a^\dagger(0) = 1 + a^\dagger(0)a(0)$，其在真空态下的期望值为 1。</p>
+            <p>展开 $a^\dagger(t) a(t)$ 并直接取真空态期望：</p>
+            $$
+            \begin{aligned}
+            \langle 0 | a^\dagger(t) a(t) | 0 \rangle &= \frac{1}{4} \langle 0 | \Big[ (a^\dagger_0 - ia_0)e^{-\frac{2g}{\hbar}t} + (a^\dagger_0 + ia_0)e^{\frac{2g}{\hbar}t} \Big] \Big[ (a_0 + i a^\dagger_0)e^{-\frac{2g}{\hbar}t} + (a_0 - i a^\dagger_0)e^{\frac{2g}{\hbar}t} \Big] | 0 \rangle \\
+            &= \frac{1}{4} \Big[ e^{-\frac{4g}{\hbar}t}\langle 0| (-ia_0)(ia^\dagger_0) |0\rangle + e^{\frac{4g}{\hbar}t}\langle 0| (ia_0)(-ia^\dagger_0) |0\rangle \\
+            &\quad + \langle 0| (-ia_0)(-ia^\dagger_0) |0\rangle + \langle 0| (ia_0)(ia^\dagger_0) |0\rangle \Big] \\
+            &= \frac{1}{4} \Big[ e^{-\frac{4g}{\hbar}t}\langle 0|a_0 a^\dagger_0|0\rangle + e^{\frac{4g}{\hbar}t}\langle 0|a_0 a^\dagger_0|0\rangle - \langle 0|a_0 a^\dagger_0|0\rangle - \langle 0|a_0 a^\dagger_0|0\rangle \Big]
+            \end{aligned}
+            $$
+            <p>代入 $\langle 0| a_0 a^\dagger_0 |0\rangle = 1$：</p>
+            $$
+            \begin{aligned}
+            \langle a^\dagger(t) a(t) \rangle &= \frac{1}{4} \left( e^{-\frac{4g}{\hbar}t} + e^{\frac{4g}{\hbar}t} \right) - \frac{1}{2} \\
+            &= \frac{1}{2} \cosh\left(\frac{4g}{\hbar}t\right) - \frac{1}{2}
+            \end{aligned}
+            $$
+            <p><em>（注：利用半角公式 $\frac{\cosh x - 1}{2} = \sinh^2\frac{x}{2}$，结果也可写为 $\sinh^2\left(\frac{2g}{\hbar}t\right)$）</em></p>
+
+            <div class="kp-box">
+                <strong>高量 / 量子光学 重点关注：</strong><br>
+                1. <strong>压缩真空态（Squeezed Vacuum）：</strong> 这道题中的哈密顿量 $H = g(a^2 + a^{\dagger 2})$ 正是量子光学中<strong>简并参量下转换</strong>（Parametric Down-Conversion）的有效哈密顿量。它将真空态演化成了压缩真空态。 <br>
+                2. <strong>Bogoliubov 变换：</strong> 你在 (b) 中求得的 $a(t)$ 和 $a^\dagger(t)$ 实际上是通过 Bogoliubov 变换对算符进行了混合，这种变换保证了新的算符仍满足玻色子对易关系 $[a(t), a^\dagger(t)] = 1$。<br>
+                3. <strong>真空中“凭空”产生光子：</strong> 从 (c) 问结果可以看出，即使初始状态完全没有光子（真空态），在外场（参量放大器）的非线性作用下，体系的平均光子数也会随时间呈指数级（$\cosh$ 展开）增长。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+
+<!-- ⬇️ 模块开始：第三题 ⬇️ -->
+    <section id="dyn-03">
+        <div class="card">
+            <h2>相互作用绘景、Dyson 级数与有效哈密顿量</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br> 
+                <p><strong>a.</strong> 考虑一个量子体系，它的哈密顿量 $H = H_0 + V$ 不含时，其中 $H_0$ 的本征值和本征矢量是容易求得的，而 $V$ 是微扰项。试写出在相互作用绘景下，体系的演化算子所满足的运动方程，并写出它的精确到 $V$ 的二阶项的 Dyson 级数近似解。（4 分）</p>
+                <p><strong>b.</strong> 在相互作用绘景下考虑一个快变的哈密顿 $H = A e^{i\omega t} + A^\dagger e^{-i\omega t}$，试运用 Dyson 级数展开至二阶的方法，求解描述这一个体系长时间平均意义下的有效哈密顿。（3 分）</p>
+                <p><strong>c.</strong> 考虑一个用于描述交流 Stark 效应的单原子—单模光场相互作用的模型：
+                $$ H = \frac{1}{2}\Omega\sigma^z + \omega a^\dagger a + g(a + a^\dagger)(\sigma^+ + \sigma^-) $$
+                试在旋波近似（RWA）下，写出相互作用绘景下描述光场——原子相互作用的含时哈密顿，再利用前一问的结果，求解长时间平均意义下的有效哈密顿。（3 分）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <h3>(a) 相互作用绘景与 Dyson 级数二阶展开</h3>
+            <p>在相互作用绘景（Interaction Picture）下，微扰势能项表示为：</p>
+            $$ V^{(I)}(t) = U_0^\dagger(t) V U_0(t) = e^{iH_0 t/\hbar} V e^{-iH_0 t/\hbar} $$
+            <p>体系演化算子 $U(t, t_0)$ 满足的运动方程为：</p>
+            $$ i\hbar \frac{d}{dt} U(t, t_0) = V^{(I)}(t) U(t, t_0), \quad \text{初始条件：} U(t_0, t_0) = 1 $$
+            <p>将其转化为积分方程并迭代，可得精确到 $V$ 的二阶项的 <strong>Dyson 级数</strong>：</p>
+            $$
+            \begin{aligned}
+            U(t, t_0) \approx 1 &-\frac{i}{\hbar} \int_{t_0}^t V^{(I)}(t_1) dt_1 \\
+            &+ \left(-\frac{i}{\hbar}\right)^2 \int_{t_0}^t dt_1 \int_{t_0}^{t_1} V^{(I)}(t_1) V^{(I)}(t_2) dt_2
+            \end{aligned}
+            $$
+
+            <h3>(b) 快变哈密顿量的长时间有效平均</h3>
+            <p>已知 $V^{(I)}(t) = A e^{i\omega t} + A^\dagger e^{-i\omega t}$，为方便计算取 $t_0 = 0$。代入一阶 Dyson 展开：</p>
+            $$
+            \begin{aligned}
+            U^{(1)}(t) &= -\frac{i}{\hbar} \int_0^t (A e^{i\omega t_1} + A^\dagger e^{-i\omega t_1}) dt_1 \\
+            &= -\frac{i}{\hbar} \left[ A \frac{1}{i\omega}(e^{i\omega t} - 1) + A^\dagger \frac{1}{-i\omega}(e^{-i\omega t} - 1) \right] \\
+            &= \frac{1}{\hbar\omega} \left[ A(1 - e^{i\omega t}) + A^\dagger(e^{-i\omega t} - 1) \right]
+            \end{aligned}
+            $$
+            <p>在长时间平均下，一阶项全为快变振荡项（$\int e^{\pm i\omega t} dt$ 在宏观时间尺度下平均为零），故略去快变项后 $\overline{U^{(1)}(t)} = 0$。</p>
+            <p>考虑二阶展开 $U^{(2)}(t)$，将被积函数展开为 4 项：</p>
+            $$ V^{(I)}(t_1)V^{(I)}(t_2) = A^2 e^{i\omega(t_1+t_2)} + A^{\dagger 2} e^{-i\omega(t_1+t_2)} + A A^\dagger e^{i\omega(t_1-t_2)} + A^\dagger A e^{-i\omega(t_1-t_2)} $$
+            <p><strong>略去快速振荡项</strong>（包含 $t_1+t_2$ 的项），只保留慢变项（包含 $t_1-t_2$ 的项）：</p>
+            $$
+            \begin{aligned}
+            U^{(2)}(t) &\approx \left(-\frac{i}{\hbar}\right)^2 \int_0^t dt_1 \int_0^{t_1} \left( A A^\dagger e^{i\omega(t_1-t_2)} + A^\dagger A e^{-i\omega(t_1-t_2)} \right) dt_2 \\
+            &= \left(-\frac{i}{\hbar}\right)^2 \int_0^t \left[ A A^\dagger \frac{e^{i\omega t_1} - 1}{i\omega} + A^\dagger A \frac{1 - e^{-i\omega t_1}}{i\omega} \right] dt_1 \\
+            &= -\frac{1}{i\hbar^2\omega} \int_0^t \left[ (A A^\dagger - A^\dagger A) - A A^\dagger e^{i\omega t_1} + A^\dagger A e^{-i\omega t_1} \right] dt_1
+            \end{aligned}
+            $$
+            <p>再次对 $t_1$ 积分，并取长时间极限 $t \to \infty$。带有 $e^{\pm i\omega t_1}$ 的积分项有限，除以 $t$ 后效力为 0，起主导作用的只有常数项的积分：</p>
+            $$ U^{(2)}(t) \approx -\frac{1}{i\hbar^2\omega} [A, A^\dagger] t = -\frac{i}{\hbar} \left( \frac{1}{\hbar\omega} [A, A^\dagger] \right) t $$
+            <p>对比有效演化算子的形式 $U(t, 0) \approx 1 - \frac{i}{\hbar} H_{\text{eff}} t$，可提取出长时间平均意义下的有效哈密顿量：</p>
+            $$ H_{\text{eff}} = \frac{1}{\hbar\omega} [A, A^\dagger] $$
+
+            <h3>(c) Jaynes-Cummings 模型与交流 Stark 效应</h3>
+            <p>令 $H_0 = \frac{1}{2}\hbar\Omega\sigma^z + \hbar\omega a^\dagger a$（补充 $\hbar$ 纲量以对应前文），微扰 $V = g(a + a^\dagger)(\sigma^+ + \sigma^-)$。</p>
+            <p>利用 <strong>Baker-Hausdorff 公式</strong> $e^A B e^{-A} = B + [A,B] + \frac{1}{2!}[A, [A,B]] + \dots$，在相互作用绘景下展开 $V^{(I)}$：</p>
+            <p>首先计算基本对易关系：$[\sigma^z, \sigma^\pm] = \pm 2\sigma^\pm$，$[a^\dagger a, a] = -a$，$[a^\dagger a, a^\dagger] = a^\dagger$。可以求得：</p>
+            $$
+            \begin{aligned}
+            [H_0, V] &= g \left( \frac{1}{2}\hbar\Omega[\sigma^z, (a+a^\dagger)(\sigma^++\sigma^-)] + \hbar\omega[a^\dagger a, (a+a^\dagger)(\sigma^++\sigma^-)] \right) \\
+            &= \dots \text{（展开化简后）} \\
+            &= \hbar g \left[ (\Omega-\omega)a\sigma^+ - (\Omega+\omega)a\sigma^- + (\Omega+\omega)a^\dagger\sigma^+ - (\Omega-\omega)a^\dagger\sigma^- \right]
+            \end{aligned}
+            $$
+            <p>高阶对易子会不断产生 $(\Omega \pm \omega)^n$ 的系数，重组为指数级数后，精确的相互作用绘景哈密顿量为：</p>
+            $$ V^{(I)}(t) = g\left( a\sigma^+ e^{i(\Omega-\omega)t} + a\sigma^- e^{-i(\Omega+\omega)t} + a^\dagger\sigma^+ e^{i(\Omega+\omega)t} + a^\dagger\sigma^- e^{-i(\Omega-\omega)t} \right) $$
+            <p><strong>引入旋波近似（RWA）：</strong> 略去高频快速振荡项（伴随能量不守恒，即同时产生光子和激发原子的 $e^{\pm i(\Omega+\omega)t}$ 项），只保留频率失谐较小的慢变项 $\Delta = \Omega - \omega$：</p>
+            $$ V^{(I)}_{\text{RWA}}(t) = g a\sigma^+ e^{i(\Omega-\omega)t} + g a^\dagger\sigma^- e^{-i(\Omega-\omega)t} $$
+            <p>这完美对应了 (b) 问的形式，其中 $A = g a\sigma^+$，等效频率为 $(\Omega - \omega)$。代入 (b) 问的公式求解有效哈密顿量：</p>
+            $$ 
+            \begin{aligned}
+            H_{\text{eff}} &= \frac{1}{\hbar(\Omega - \omega)} [g a\sigma^+, g a^\dagger\sigma^-] \\
+            &= \frac{g^2}{\hbar(\Omega - \omega)} \left( a a^\dagger \sigma^+ \sigma^- - a^\dagger a \sigma^- \sigma^+ \right)
+            \end{aligned}
+            $$
+            <p>代入关系式 $a a^\dagger = a^\dagger a + 1$ 且 $\sigma^+ \sigma^- = |e\rangle\langle e|$，$\sigma^- \sigma^+ = |g\rangle\langle g|$，可得最终描述 AC Stark 频移的有效哈密顿量：</p>
+            $$ H_{\text{eff}} = \frac{g^2}{\hbar(\Omega - \omega)} \left( (a^\dagger a + 1)|e\rangle\langle e| - a^\dagger a |g\rangle\langle g| \right) $$
+
+            <div class="kp-box">
+                <strong>高量 / 量子光学 重点关注：</strong><br>
+                1. <strong>Dyson 级数的物理意义：</strong> 一阶展开对应于单次相互作用（如单光子吸收/发射）；二阶展开对应于发生了一个中间虚过程的<strong>双光子跃迁或散射过程</strong>。长期平均（粗粒化）正是把虚过程积掉，得到宏观可见的有效相互作用。<br>
+                2. <strong>有效哈密顿量的高阶影响：</strong> 本题导出的 $H_{\text{eff}}$ 即为<strong>大失谐（Dispersive Limit，$\Delta \gg g$）</strong>情况下的 AC Stark 效应。处于激发态 $|e\rangle$ 的原子能级会因为光子数 $n$ 产生额外的 $\frac{g^2}{\Delta}(n+1)$ 频移，而基态 $|g\rangle$ 会产生 $-\frac{g^2}{\Delta}n$ 的光频移。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+<!-- ⬇️ 模块开始：密度矩阵第一题 ⬇️ -->
+    <section id="density-01">
+        <div class="card">
+            <h2>量子系综、热平衡密度矩阵与自旋 1/2 体系</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+                <p><strong>a.</strong> 试解释什么是一个量子系综的密度矩阵？密度矩阵的迹一特性在物理上的解释是什么？（4 分）</p>
+                <p><strong>b.</strong> 考虑一个单模光场，其哈密顿为 $H = \hbar\omega a^\dagger a$。试写出描述其在温度为 $T$ 的热平衡状态下的密度矩阵，求出相应的配分函数 $Z$ 和热平衡状态下的平均光子数 $N_{\text{thermal}}(T)$。（4 分）</p>
+                <p><strong>c.</strong> 再考虑一个自旋 $1/2$ 体系的量子系综，假设分别测量其 Pauli 矩阵的三个分量 $\sigma_x, \sigma_y, \sigma_z$ 而得的平均值分别是 $n_x, n_y, n_z$，试利用这三个平均值表示该量子系综的密度矩阵。（3 分）</p>
+                <p><strong>d.</strong> 试证明三维矢量 $[n_x, n_y, n_z]$ 的长度是有上限，并求出这个上限。试证明当一...（截断）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <h3>(a) 密度矩阵的物理意义与迹一性</h3>
+            <p><strong>定义：</strong> 密度矩阵是用来描述处于混合态（或纯态）量子系统物理性质的力学量算符。</p>
+            <p>对于混合态，其密度算符定义为各纯态的概率加权和：$\hat{\rho} = \sum_i p_i |\psi_i\rangle\langle\psi_i|$，其中 $p_i$ 是系统处于态 $|\psi_i\rangle$ 的经典概率。</p>
+            <p><strong>迹一特性推导：</strong></p>
+            $$ \mathrm{Tr}(\hat{\rho}) = \sum_n \langle n | \left( \sum_i p_i |\psi_i\rangle\langle\psi_i| \right) | n \rangle = \sum_i p_i \left( \sum_n \langle\psi_i|n\rangle\langle n|\psi_i\rangle \right) = \sum_i p_i \langle\psi_i|\psi_i\rangle = \sum_i p_i = 1 $$
+            <p><strong>物理上的解释：</strong> 密度矩阵的迹等于系统处于所有可能量子态的概率之和，由于概率具有归一性，因此系统的总概率必须为 1。</p>
+
+            <h3>(b) 热平衡态单模光场的密度矩阵与平均光子数</h3>
+            <p>单模光场哈密顿量 $\hat{H} = \hbar\omega a^\dagger a$。在热力学温度 $T$ 下（令 $\beta = \frac{1}{k_B T}$），热平衡密度矩阵为：</p>
+            $$ \rho = \frac{e^{-\beta\hat{H}}}{Z} = \frac{1}{Z} \begin{pmatrix} 1 & & & \\ & e^{-\beta\hbar\omega} & & \\ & & e^{-2\beta\hbar\omega} & \\ & & & \ddots \end{pmatrix} $$
+            <p>配分函数 $Z$ 为无限项等比数列求和：</p>
+            $$ Z = \mathrm{Tr}(e^{-\beta\hat{H}}) = 1 + e^{-\beta\hbar\omega} + e^{-2\beta\hbar\omega} + \dots = \frac{1}{1 - e^{-\beta\hbar\omega}} $$
+            <p>平均光子数计算：</p>
+            $$ N_{\text{thermal}}(T) = \langle\hat{n}\rangle = \mathrm{Tr}(\hat{n}\rho) = \frac{1}{Z} \mathrm{Tr}\left[ \begin{pmatrix} 1 & & \\ & e^{-\beta\hbar\omega} & \\ & & e^{-2\beta\hbar\omega} \\ & & & \ddots \end{pmatrix} \begin{pmatrix} 0 & & \\ & 1 & \\ & & 2 \\ & & & \ddots \end{pmatrix} \right] $$
+            <p>提取迹的结果得到一个级数，令该级数为 $S$：</p>
+            $$ S = e^{-\beta\hbar\omega} + 2e^{-2\beta\hbar\omega} + \dots + ne^{-n\beta\hbar\omega} + \dots $$
+            <p>采用错位相减法，两边同乘 $e^{-\beta\hbar\omega}$：</p>
+            $$ e^{-\beta\hbar\omega} S = e^{-2\beta\hbar\omega} + 2e^{-3\beta\hbar\omega} + \dots + (n-1)e^{-n\beta\hbar\omega} + ne^{-(n+1)\beta\hbar\omega} + \dots $$
+            <p>两式相减可化为等比数列求和：</p>
+            $$
+            \begin{aligned}
+            (1 - e^{-\beta\hbar\omega}) S &= e^{-\beta\hbar\omega} + e^{-2\beta\hbar\omega} + \dots + e^{-n\beta\hbar\omega} + \dots \\
+            &= \frac{e^{-\beta\hbar\omega}}{1 - e^{-\beta\hbar\omega}}
+            \end{aligned}
+            $$
+            <p>解得 $S = \frac{e^{-\beta\hbar\omega}}{(1 - e^{-\beta\hbar\omega})^2}$。代回平均光子数公式：</p>
+            $$ N_{\text{thermal}}(T) = \frac{S}{Z} = \frac{\frac{e^{-\beta\hbar\omega}}{(1 - e^{-\beta\hbar\omega})^2}}{\frac{1}{1 - e^{-\beta\hbar\omega}}} = \frac{e^{-\beta\hbar\omega}}{1 - e^{-\beta\hbar\omega}} = \frac{1}{e^{\frac{\hbar\omega}{k_B T}} - 1} $$
+
+            <h3>(c) 二能级（自旋 1/2）体系的密度矩阵重构</h3>
+            <p>已知 Pauli 矩阵的形式，设密度矩阵为一般形式 $\rho = \begin{pmatrix} A & B \\ C & D \end{pmatrix}$。利用测量平均值 $\langle\sigma_i\rangle = \mathrm{Tr}(\rho\sigma_i)$：</p>
+            $$
+            \begin{aligned}
+            \langle\sigma_x\rangle &= \mathrm{Tr}\left[ \begin{pmatrix} A & B \\ C & D \end{pmatrix}\begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \right] = \mathrm{Tr}\begin{pmatrix} B & A \\ D & C \end{pmatrix} = B + C = n_x \\
+            \langle\sigma_y\rangle &= \mathrm{Tr}\left[ \begin{pmatrix} A & B \\ C & D \end{pmatrix}\begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix} \right] = \mathrm{Tr}\begin{pmatrix} iB & -iA \\ iD & -iC \end{pmatrix} = i(B - C) = n_y \\
+            \langle\sigma_z\rangle &= \mathrm{Tr}\left[ \begin{pmatrix} A & B \\ C & D \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix} \right] = \mathrm{Tr}\begin{pmatrix} A & -B \\ C & -D \end{pmatrix} = A - D = n_z
+            \end{aligned}
+            $$
+            <p>结合密度矩阵的迹一性要求 $A + D = 1$，联立方程组：</p>
+            $$
+            \begin{cases}
+            A + D = 1 \\
+            A - D = n_z \\
+            B + C = n_x \\
+            B - C = -in_y
+            \end{cases}
+            \implies
+            \begin{cases}
+            A = \frac{1}{2}(1 + n_z) \\
+            D = \frac{1}{2}(1 - n_z) \\
+            B = \frac{1}{2}(n_x - in_y) \\
+            C = \frac{1}{2}(n_x + in_y)
+            \end{cases}
+            $$
+            <p>故该量子系综的密度矩阵表示为：</p>
+            $$ \rho = \frac{1}{2} \begin{pmatrix} 1 + n_z & n_x - in_y \\ n_x + in_y & 1 - n_z \end{pmatrix} $$
+
+            <h3>(d) 极化矢量长度的上限（布洛赫球）</h3>
+            <p>对于任意物理上的密度矩阵，必须满足 $\mathrm{Tr}(\rho^2) \le 1$。计算 $\rho^2$ 的对角元（非对角元在求迹时不作贡献）：</p>
+            $$
+            \rho^2 = \begin{pmatrix} \frac{1}{2}(1 + n_z) & \frac{1}{2}(n_x - in_y) \\ \frac{1}{2}(n_x + in_y) & \frac{1}{2}(1 - n_z) \end{pmatrix} \begin{pmatrix} \frac{1}{2}(1 + n_z) & \frac{1}{2}(n_x - in_y) \\ \frac{1}{2}(n_x + in_y) & \frac{1}{2}(1 - n_z) \end{pmatrix}
+            $$
+            <p>对角线第一个元素：$\frac{1}{4}(1+n_z)^2 + \frac{1}{4}(n_x^2 + n_y^2)$<br>
+            对角线第二个元素：$\frac{1}{4}(n_x^2 + n_y^2) + \frac{1}{4}(1-n_z)^2$</p>
+            <p>求迹并代入不等式：</p>
+            $$
+            \begin{aligned}
+            \mathrm{Tr}(\rho^2) &= \frac{1}{2}(n_x^2 + n_y^2) + \frac{1}{4}(1+n_z)^2 + \frac{1}{4}(1-n_z)^2 \\
+            &= \frac{1}{2}(n_x^2 + n_y^2) + \frac{1}{2}(1 + n_z^2) \\
+            &= \frac{1}{2}(n_x^2 + n_y^2 + n_z^2 + 1) \le 1
+            \end{aligned}
+            $$
+            <p>由此直接解得：</p>
+            $$ n_x^2 + n_y^2 + n_z^2 \le 1 $$
+            <p>即三维矢量 $\vec{n} = [n_x, n_y, n_z]$ 的长度上限为 $1$。当且仅当系统处于<strong>纯态</strong>（$\mathrm{Tr}(\rho^2) = 1$）时，取等号，此时矢量长度取得最大值 $1$。</p>
+
+            <div class="kp-box">
+                <strong>Sakurai 重点关注：</strong><br>
+                1. <strong>普朗克公式的微观起源：</strong> 第 (b) 问实际上从量子统计力学严格推导出了普朗克黑体辐射公式中的平均光子数（玻色-爱因斯坦统计）。<br>
+                2. <strong>布洛赫球（Bloch Sphere）：</strong> 第 (c) 问结果可以简写为 $\rho = \frac{1}{2}(I + \vec{n}\cdot\vec{\sigma})$。这里的 $\vec{n}$ 称为布洛赫矢量或极化矢量。第 (d) 问证明了所有的物理态都位于半径为 1 的实心球内，球面表示纯态（$|\vec{n}|=1$），球内部表示混合态（$|\vec{n}|<1$），球心（$\vec{n}=0$）代表完全混合态（最大熵态）。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+<!-- ⬇️ 模块开始：密度矩阵第二题 ⬇️ -->
+    <section id="density-02">
+        <div class="card">
+            <h2>自旋 1/2 正则系综的磁化率</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+		求自旋 1/2 正则系综的磁化率。
+                <p><strong>a.</strong> 每个粒子的磁矩 $\mu_B = \frac{e\hbar}{2mc}$，在 $z$ 方向外磁场下的哈密顿量 $H = \omega S_z$，其中 $\omega = \frac{|e|B}{mc}$，$S_z = \frac{\hbar}{2}\sigma_z$，而泡利矩阵 $\sigma_z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$。根据 $\rho = \frac{1}{Z}e^{-\beta H}$，和 $Z = \mathrm{tr} e^{-\beta H}$，求密度算符的表达式，并证明配分函数为 $e^{-\beta\frac{\hbar\omega}{2}} + e^{\beta\frac{\hbar\omega}{2}}$。</p>
+                <p><strong>b.</strong> 观测量平均值可表示为 $[S_x] = \frac{1}{Z} \mathrm{tr}(e^{-\beta H} S_x)$。已知 $\sigma_x = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$，$\sigma_y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}$，计算 $x, y, z$ 三个方向的自旋角动量期望值。（4 分）</p>
+                <p><strong>c.</strong> 计算磁化率。（3 分）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <h3>(a) 密度算符与配分函数</h3>
+            <p>已知哈密顿量 $H = \omega S_z$，且 $S_z = \frac{\hbar}{2}\begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$。密度矩阵定义为 $\rho = \frac{1}{Z}e^{-\beta H}$。</p>
+            <p>由于 $S_z$ 已经是原表象下的对角矩阵，其矩阵指数可以直接作用在对角元上：</p>
+            $$ \rho = \frac{1}{Z} e^{-\beta\omega S_z} = \frac{1}{Z} \begin{pmatrix} e^{-\frac{\hbar}{2}\beta\omega} & 0 \\ 0 & e^{\frac{\hbar}{2}\beta\omega} \end{pmatrix} $$
+            <p>配分函数 $Z$ 为非归一化密度矩阵的迹（即对角元之和）：</p>
+            $$ Z = \mathrm{Tr}(e^{-\beta H}) = e^{-\frac{\hbar}{2}\beta\omega} + e^{\frac{\hbar}{2}\beta\omega} \quad \text{（证毕）} $$
+            
+            <p><em>注：利用泡利矩阵的性质，也可以将指数算符展开为 $e^{x\sigma_z} = \cosh(x)I + \sinh(x)\sigma_z$ 来推导。</em></p>
+
+            <h3>(b) 自旋角动量各分量的期望值</h3>
+            <p>利用系综平均公式 $\langle A \rangle = \mathrm{Tr}(\rho A)$ 进行计算。</p>
+            <p>对于 $x$ 方向：</p>
+            $$ 
+            \langle S_x \rangle = \mathrm{Tr}(\rho S_x) = \frac{\hbar}{2}\frac{1}{Z} \mathrm{Tr}\left[ \begin{pmatrix} e^{-\frac{\hbar}{2}\beta\omega} & 0 \\ 0 & e^{\frac{\hbar}{2}\beta\omega} \end{pmatrix} \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix} \right] = \frac{\hbar}{2}\frac{1}{Z} \mathrm{Tr}\begin{pmatrix} 0 & e^{-\frac{\hbar}{2}\beta\omega} \\ e^{\frac{\hbar}{2}\beta\omega} & 0 \end{pmatrix} = 0 
+            $$
+            <p>对于 $y$ 方向：</p>
+            $$ 
+            \langle S_y \rangle = \mathrm{Tr}(\rho S_y) = \frac{\hbar}{2}\frac{1}{Z} \mathrm{Tr}\left[ \begin{pmatrix} e^{-\frac{\hbar}{2}\beta\omega} & 0 \\ 0 & e^{\frac{\hbar}{2}\beta\omega} \end{pmatrix} \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix} \right] = 0 
+            $$
+            <p>对于 $z$ 方向：</p>
+            $$
+            \begin{aligned}
+            \langle S_z \rangle &= \mathrm{Tr}(\rho S_z) = \frac{\hbar}{2}\frac{1}{Z} \mathrm{Tr}\left[ \begin{pmatrix} e^{-\frac{\hbar}{2}\beta\omega} & 0 \\ 0 & e^{\frac{\hbar}{2}\beta\omega} \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix} \right] \\
+            &= \frac{\hbar}{2}\frac{1}{Z} (e^{-\frac{\hbar}{2}\beta\omega} - e^{\frac{\hbar}{2}\beta\omega}) \\
+            &= -\frac{\hbar}{2} \frac{e^{\frac{\hbar}{2}\beta\omega} - e^{-\frac{\hbar}{2}\beta\omega}}{e^{\frac{\hbar}{2}\beta\omega} + e^{-\frac{\hbar}{2}\beta\omega}} \\
+            &= -\frac{\hbar}{2} \tanh\left(\frac{\hbar}{2}\beta\omega\right)
+            \end{aligned}
+            $$
+
+            <h3>(c) 计算磁化率（附赠完整推导）</h3>
+            <p>设单位体积内有 $n$ 个粒子。宏观磁化强度 $M$ 为单位体积内磁矩的统计平均值。由于哈密顿量为 $H = -\vec{\mu} \cdot \vec{B} = \omega S_z$，且 $\omega = \frac{|e|B}{mc}$，可知单粒子 $z$ 方向磁矩算符为 $\mu_z = -\frac{|e|}{mc}S_z$。</p>
+            <p>因此，系统的磁化强度为：</p>
+            $$ M = n \langle \mu_z \rangle = -n \frac{|e|}{mc} \langle S_z \rangle = n \frac{|e|\hbar}{2mc} \tanh\left(\frac{\hbar}{2}\beta\omega\right) $$
+            <p>代入玻尔磁子 $\mu_B = \frac{|e|\hbar}{2mc}$ 以及 $\omega = \frac{|e|B}{mc} = \frac{2\mu_B B}{\hbar}$，可得：</p>
+            $$ M = n \mu_B \tanh(\beta \mu_B B) = n \mu_B \tanh\left(\frac{\mu_B B}{k_B T}\right) $$
+            <p>等温磁化率定义为在弱磁场（$B \to 0$）下磁化强度对磁场的偏导数。当 $B \to 0$ 时，利用泰勒展开 $\tanh(x) \approx x$：</p>
+            $$ M \approx n \mu_B \left( \frac{\mu_B B}{k_B T} \right) = \frac{n \mu_B^2}{k_B T} B $$
+            <p>故磁化率 $\chi$ 为：</p>
+            $$ \chi = \lim_{B \to 0} \frac{\partial M}{\partial B} = \frac{n \mu_B^2}{k_B T} $$
+
+            <div class="kp-box">
+                <strong>统计物理关联重点：</strong><br>
+                1. <strong>居里定律（Curie's Law）：</strong> 第 (c) 问推导出的 $\chi \propto \frac{1}{T}$ 正是著名的居里定律。它说明在高温或弱场下，热运动会破坏磁矩的有序排列。<br>
+                2. <strong>各向同性破坏：</strong> 外磁场选定了特定的量子化轴（$z$ 轴），导致对称性破缺。这也是为什么 $\langle S_x \rangle$ 和 $\langle S_y \rangle$ 的系综平均值为 0，而 $\langle S_z \rangle$ 不为 0 的物理原因。<br>
+                3. $M \propto \tanh(\dots)$ 是自旋 $1/2$ 体系特有的布里渊函数（Brillouin function）形式。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+
+    <footer>
+        &copy; 2026 HUST Physics | Created by Kerwin & Offerd by Scilence， 
+    </footer>
+</main>
+
+<script>
+    // 控制侧边栏折叠的逻辑
+    function toggleCategory(element) {
+        element.parentElement.classList.toggle('active');
+    }
+</script>
+
+</body>
+</html>
