@@ -224,6 +224,16 @@
 <aside class="sidebar">
     <div class="sidebar-header">Per aspera ad astra </div>
 
+<!-- 分类：知识点总结 -->
+    <div class="category">
+        <div class="category-title" onclick="toggleCategory(this)">
+            知识点总结与数学基础 <span class="arrow">▶</span>
+        </div>
+        <div class="category-content">
+            <a href="#summary-01">量子力学基础公设与恒等式</a>
+        </div>
+    </div>
+
     <!-- 分类：量子动力学 -->
     <div class="category">
     <div class="category-title" onclick="toggleCategory(this)">
@@ -257,12 +267,130 @@
 	<a href="#angmom-03">角动量分量的球坐标表示与拉普拉斯算子</a>     
     </div>
 
+<!-- 分类：电磁场与 A-B 效应 -->
+    <div class="category">
+        <div class="category-title" onclick="toggleCategory(this)">
+            电磁场与 A-B 效应 <span class="arrow">▶</span>
+        </div>
+        <div class="category-content">
+            <a href="#ab-landau-01">A-B 效应与 Landau 能级</a>
+        </div>
+    </div>
+
+<!-- 分类：Berry 相位 -->
+    <div class="category">
+        <div class="category-title" onclick="toggleCategory(this)">
+            Berry 相位与绝热演化 <span class="arrow">▶</span>
+        </div>
+        <div class="category-content">
+            <a href="#berry-01">Berry 相位、曲率与自旋 1/2 模型</a>
+        </div>
+    </div>
+
+<!-- 分类：散射理论 -->
+    <div class="category">
+        <div class="category-title" onclick="toggleCategory(this)">
+            散射理论 <span class="arrow">▶</span>
+        </div>
+        <div class="category-content">
+            <a href="#scattering-01">散射截面、Lippmann-Schwinger 积分方程与 Born 近似</a>
+	    <a href="#scattering-02">汤川势的 Born 近似与卢瑟福散射公式</a>
+        </div>
+    </div>
+
 </div>
 </aside>
 
 <!-- 内容区 -->
 <!-- 主内容区开始 -->
 <main class="main-container">
+
+<!-- ⬇️ 模块开始：知识点总结第一部分 ⬇️ -->
+    <section id="summary-01">
+        <div class="card">
+            <h2>量子力学基础公设与核心数学恒等式总结</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本章节为高量（Advanced Quantum Mechanics）前置知识与核心数学工具的速查总结。涵盖了 Pauli 矩阵代数、经典分析力学对应、表象变换理论、广义不确定性原理、对称性生成元以及算符指数恒等式（BCH 公式）。
+            </div>
+
+            <!-- 节选零：Pauli 矩阵 -->
+            <h3>1.1 节选零：Pauli 矩阵代数</h3>
+            <p><strong>定义：</strong></p>
+            $$ \sigma_z = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}, \quad \sigma_x = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}, \quad \sigma_y = \begin{bmatrix} 0 & -i \\ i & 0 \end{bmatrix} $$
+            <p><strong>升降算符：</strong></p>
+            $$
+            \begin{aligned}
+            \sigma_+ &= \frac{1}{2}(\sigma_x + i\sigma_y) = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} = |\uparrow\rangle\langle\downarrow| \\
+            \sigma_- &= \frac{1}{2}(\sigma_x - i\sigma_y) = \begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix} = |\downarrow\rangle\langle\uparrow|
+            \end{aligned}
+            $$
+            <p><strong>乘积与对易关系：</strong></p>
+            $$ \sigma_i \sigma_j = \delta_{ij}I + i\epsilon_{ijk}\sigma_k $$
+            $$ [\sigma_i, \sigma_j] = 2i\epsilon_{ijk}\sigma_k, \quad [\sigma_z, \sigma_\pm] = \pm 2\sigma_\pm $$
+            $$ \{\sigma_i, \sigma_j\} = 2\delta_{ij}I $$
+
+            <!-- 节选一：分析力学 -->
+            <h3>1.2 节选一：分析力学与量子对应</h3>
+            <p><strong>Lagrangian 与 Hamiltonian：</strong></p>
+            $$ L = L(q, \dot{q}, t), \quad p_i = \frac{\partial L}{\partial \dot{q}^i} $$
+            $$ H(q, p, t) = p_i \dot{q}^i - L $$
+            <p><strong>正则方程与全导数：</strong></p>
+            $$ \frac{dq^i}{dt} = \frac{\partial H}{\partial p_i} = \{q^i, H\}, \quad \frac{dp_i}{dt} = -\frac{\partial H}{\partial q^i} = \{p_i, H\} $$
+            $$ \frac{dA}{dt} = \frac{\partial A}{\partial t} + \{A, H\} $$
+            <p><strong>Poisson 括号与狄拉克量子化规则：</strong></p>
+            $$ \{A, B\} = \frac{\partial A}{\partial q^i}\frac{\partial B}{\partial p_i} - \frac{\partial A}{\partial p_i}\frac{\partial B}{\partial q^i} $$
+            $$ \{ \quad \} \longleftrightarrow \frac{[\quad]}{i\hbar} $$
+
+            <!-- 节选二到四：数学基础与表象变换 -->
+            <h3>1.3 节选二~四：柯西不等式、完备性与表象变换</h3>
+            <p><strong>柯西不等式 (Cauchy-Schwarz)：</strong></p>
+            $$ |\langle\psi_1|\psi_2\rangle|^2 \le \langle\psi_1|\psi_1\rangle \langle\psi_2|\psi_2\rangle \quad \text{(等号成立当且仅当二者成比例)} $$
+            <p><strong>概率密度与概率流密度：</strong></p>
+            $$ \rho = \psi^*\psi, \quad \vec{J} = \frac{i\hbar}{2m}[\psi\nabla\psi^* - \psi^*\nabla\psi] $$
+            <p><strong>封闭性 (Closure relation)：</strong>对于正交归一基底 $\{|u_i\rangle\}$：</p>
+            $$ \sum_i |u_i\rangle\langle u_i| = \mathbf{1} \implies \sum_i u_i^*(r')u_i(r) = \delta(r - r') $$
+            <p><strong>表象变换：</strong>设旧基 $\{|u_i\rangle\}$ 换到新基 $\{|t_k\rangle\}$，变换矩阵 $S_{ik} = \langle u_i|t_k\rangle$：</p>
+            $$ |t_k\rangle = \sum_i |u_i\rangle\langle u_i|t_k\rangle = \sum_i |u_i\rangle S_{ik} $$
+            $$ |\text{new}\rangle = S^\dagger |\text{old}\rangle, \quad A' = S^\dagger A S $$
+            <p><em>注：力学量的期望值不会因为表象的变换而改变，因为物理客体是客观的，表象的选择是主观的。</em></p>
+
+            <!-- 节选五：不确定性关系 -->
+            <h3>1.4 节选五：Heisenberg 广义不确定关系</h3>
+            <p>对于任意两个 Hermitian 算符 $A, B$，有：</p>
+            $$ \langle(\Delta A)^2\rangle \langle(\Delta B)^2\rangle \ge \frac{1}{4}|\langle [A, B] \rangle|^2 $$
+            <p><strong>证明核心：</strong> 构造 $|\alpha\rangle = \Delta A|\psi\rangle, |\beta\rangle = \Delta B|\psi\rangle$，利用柯西不等式，并将算符乘积拆分为对易子与反对易子：$\Delta A \Delta B = \frac{1}{2}[\Delta A, \Delta B] + \frac{1}{2}\{\Delta A, \Delta B\}$，第一项期望为纯虚数，第二项为纯实数。取模的平方即可得证。</p>
+            <p><strong>取等号的条件（最小不确定包）：</strong> <br>
+            1. $|\alpha\rangle = c|\beta\rangle \implies \Delta x|\psi\rangle = \eta \Delta p|\psi\rangle$<br>
+            2. $\eta$ 必须为纯虚数 $\eta = -i\lambda$。<br>
+            求解一阶微分方程可得出此时的波函数必为<strong>高斯波包</strong>形式：$\psi(x) = C e^{i\langle p\rangle x/\hbar} e^{-\frac{(x-\langle x\rangle)^2}{2\lambda\hbar}}$。</p>
+
+            <!-- 节选六到七：电磁场与生成元 -->
+            <h3>1.5 节选六~七：电磁场耦合与对称性生成元</h3>
+            <p><strong>含矢势 $\vec{A}$ 的哈密顿量 (Minimal Coupling)：</strong></p>
+            $$ H = \frac{\vec{p}_m^2}{2m} + V = \frac{(\vec{p}_c - q\vec{A})^2}{2m} $$
+            <p>其中 $\vec{p}_c$ 为正则动量，$\vec{p}_m$ 为机械动量：$\vec{p}_c = \vec{p}_m + q\vec{A} = m\vec{v} + q\vec{A}$。</p>
+            <p><strong>平移与旋转算符：</strong> <em>(注：讲义中约定 $\hbar=1$ 或已吸收进动量定义中)</em></p>
+            $$ T(a) = \exp[-i\vec{a}\cdot\vec{p}] \implies \hat{\vec{p}} = -i\nabla $$
+            $$ R_n(\theta) = \exp[-i\theta\vec{n}\cdot\vec{L}] \implies \hat{\vec{L}} = \vec{r} \times \hat{\vec{p}} $$
+            <p>有限旋转可以通过无穷小旋转的极限得到：$\lim_{N\to\infty} \left( 1 - i\vec{n}\cdot\vec{L}\frac{\theta}{N} \right)^N = e^{-i\theta\vec{n}\cdot\vec{L}}$。</p>
+
+            <!-- Quantum Dynamics: 超算符与 BCH -->
+            <h3>1.6 Quantum Dynamics：超算符与 C-B-H 公式</h3>
+            <p><strong>超算符 (Superoperator)：</strong> 使得 $S_A(B) = [A, B]$，因此有 Hadamard 引理：</p>
+            $$ e^A B e^{-A} = e^{S_A} B = e^{[A, \cdot]} B = B + [A, B] + \frac{1}{2!}[A, [A, B]] + \dots $$
+            <p><strong>C-B-H (Glauber) 公式：</strong> 若两个算符满足 $[[A, B], A] = 0$ 且 $[[A, B], B] = 0$（即对易子与本身对易），则有指数拆分恒等式：</p>
+            $$ e^{A+B} = e^A e^B e^{-\frac{1}{2}[A, B]} \iff e^A e^B = e^{A+B} e^{\frac{1}{2}[A, B]} $$
+            <p><em>证明思路：构造辅助函数 $F(t) = e^{At} e^{Bt}$，对其求导 $\frac{dF}{dt}$ 并利用上述超算符推论进行移项化简，最后积分取 $t=1$ 即可。</em></p>
+
+            <div class="kp-box">
+                <strong>笔记食用指南：</strong><br>
+                这一章节是后续所有推导的地基。特别是 <strong>C-B-H 公式</strong> 在量子光学（相干态推导、产生湮灭算符代数）中是神兵利器；而 <strong>广义不确定性原理的等号成立条件</strong> 经常作为简答题或证明题出现，高斯波包的推导逻辑需要牢记。
+            </div>
+            <!-- 答案区域结束 -->
+
+
 <section id="dyn-01">
         <div class="card">
             <h2>概率流密度与电磁场中的规范变换</h2>
@@ -999,13 +1127,326 @@
             <p><strong>证毕。</strong></p>
 
             <div class="kp-box">
-                <strong>物理图像进阶（中心力场的核心秘密）：</strong><br>
+                <strong>物理图像：中心力场</strong><br>
                 1. <strong>动能项的分解：</strong> 在薛定谔方程中，动能项 $\hat{T} = \frac{\mathbf{p}^2}{2m} = -\frac{\hbar^2}{2m}\nabla^2$。代入第 (b) 问的结论，动能被完美拆分成了两部分：径向平动动能和<strong>角向旋转动能</strong> $\frac{\hat{L}^2}{2mr^2}$。这就和经典力学里的 $E_k = \frac{p_r^2}{2m} + \frac{L^2}{2I}$（转动惯量 $I=mr^2$）完全对应上了！<br>
                 2. <strong>分离变量法：</strong> 正因为中心力场势能 $V(r)$ 与角度无关，哈密顿量可以写成 $H(r) + \frac{\hat{L}^2}{2mr^2}$。由于 $H$ 和 $\hat{L}^2$ 共用一套角向本征函数，这就是为什么无论是氢原子、三维谐振子还是无限深球方势阱，它们的角向波函数全都是统一的<strong>球谐函数 $Y_l^m(\theta, \phi)$</strong>。
             </div>
             <!-- 答案区域结束 -->
     </section>
     <!-- ⬆️ 模块结束 ⬆️ -->
+
+<!-- ⬇️ 模块开始：A-B效应第一题 ⬇️ -->
+    <section id="ab-landau-01">
+        <div class="card">
+            <h2>Aharonov-Bohm 效应与 Landau 能级简并度</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+                <p><strong>a.</strong> 试简要叙述 Aharonov-Bohm 效应。这一效应为何不能用经典物理的理论解释？（3 分）</p>
+                <p><strong>b.</strong> 考虑一个无自旋粒子在三维空间中的运动。试写出其 Feynman 传播子的路径积分表示的 Lagrangian 形式，并利用这一形式解释 Aharonov-Bohm 效应。（4 分）</p>
+                <p><strong>c.</strong> 继续考虑在 $x-y$ 平面上的无相互作用二维电子气体，它被局限在一个面积为 $A$ 的二维无限深势阱中，在 $z$ 方向加有匀强磁场 $B_z$。试利用 Aharonov-Bohm 效应的结论，阐释该体系的 Landau 能级的简并度。（3 分）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <style>
+                /* 插图占位框的样式，直接放在这里即可生效 */
+                .sketch-placeholder {
+                    background: #fafafa; border: 2px dashed #cfd8dc; border-radius: 8px;
+                    padding: 30px; text-align: center; color: #78909c; margin: 20px auto; max-width: 80%;
+                    font-family: 'Noto Serif SC', serif;
+                }
+            </style>
+
+            <h3>(a) Aharonov-Bohm 效应的简述与经典物理的失效</h3>
+            
+            <div class="sketch-placeholder">
+                [ 🖼️ 插图占位：电子双缝干涉与通电螺线管实验示意图 ]<br>
+                <span style="font-size: 0.85rem;">（若需插入真实图片，请将此 div 替换为 &lt;img src="图.png" width="100%"&gt;）</span>
+            </div>
+
+            <p><strong>实验叙述：</strong> 将无限长通电螺线管垂直放入电子双缝干涉实验的装置（即双缝的后方两干涉路径之间）。此时螺线管内部存在磁场 $\vec{B} \neq 0$，而在螺线管外部电子所经过的区域磁场 $\vec{B} = 0$，但存在磁矢势 $\vec{A} \neq 0$（采用库仑规范 $\nabla \cdot \vec{A} = 0$）。</p>
+            <p><strong>为何不能用经典理论解释：</strong> 按照经典电动力学理论，电子受到的洛伦兹力为 $\vec{F} = -e(\vec{E} + \vec{v} \times \vec{B})$。因为电子经过的区域 $\vec{B} = 0$，电子不受磁场力，其经典运动轨迹不应发生任何改变。然而在实际的量子力学实验中，<strong>屏幕上的干涉条纹却发生了移动</strong>。这说明磁矢势 $\vec{A}$ 在量子力学中不仅是数学辅助工具，而是能产生可观测宏观效应的真实物理量。$\vec{A} \neq 0$ 的区域使两束相干的带电粒子波函数产生了不同的相位变化。</p>
+
+            <h3>(b) Feynman 路径积分解释 A-B 效应</h3>
+            <p>无自旋电荷在电磁场中的经典拉格朗日量（Lagrangian）为：</p>
+            $$ L = \frac{1}{2}m\dot{\vec{r}}^2 - e\vec{A} \cdot \dot{\vec{r}} - V(\vec{r}) = L_0 - e\vec{A} \cdot \dot{\vec{r}} $$
+            <p>根据 Feynman 路径积分理论，传播子（Propagator）可表示为所有可能路径的积分：</p>
+            $$ K(x_b, t_b; x_a, t_a) = \int \mathcal{D}[\vec{r}(t)] \exp\left( \frac{i}{\hbar} \int_{t_a}^{t_b} L dt \right) $$
+            <p>将包含磁矢势的拉格朗日量代入，作用量 $S$ 的积分为：</p>
+            $$ \int L dt = \int L_0 dt - e \int \vec{A} \cdot d\vec{r} $$
+            <p>考虑电子通过双缝到达屏幕的两条经典路径 $P_1$ 和 $P_2$，它们到达同一点的波函数叠加的相位差 $\Delta \phi$ 由作用量差决定：</p>
+            $$ \Delta \phi = \Delta \phi_0 - \frac{e}{\hbar} \left( \int_{P_1} \vec{A} \cdot d\vec{r} - \int_{P_2} \vec{A} \cdot d\vec{r} \right) = \Delta \phi_0 - \frac{e}{\hbar} \oint_C \vec{A} \cdot d\vec{r} $$
+            <p>利用斯托克斯定理（Stokes' Theorem）：</p>
+            $$ \oint_C \vec{A} \cdot d\vec{r} = \int_S (\nabla \times \vec{A}) \cdot d\vec{S} = \int_S \vec{B} \cdot d\vec{S} = \Phi_B $$
+            <p>由此可见，两束电子波的相对相位差多出了一个与磁通量成正比的拓扑项 $\Delta \phi_{AB} = -\frac{e\Phi_B}{\hbar}$。正是这个相位差导致了干涉条纹的移动。</p>
+
+            <h3>(c) Landau 能级简并度的 A-B 效应视角</h3>
+            
+            <div class="sketch-placeholder">
+                [ 🖼️ 插图占位：x-y 平面上的无限深势阱与 z 方向磁场 ]
+            </div>
+
+            <p>在 Landau 规范 $\vec{A} = (0, Bx, 0)$ 下，体系的本征波函数形式为：</p>
+            $$ \psi \sim \exp(ik_y y) H_n(x + k_y l_B^2) \exp\left[-\frac{1}{2l_B^2}(x + k_y l_B^2)^2\right], \quad \text{其中磁长度 } l_B = \sqrt{\frac{\hbar}{eB}} $$
+            <p>该波函数在 $y$ 方向是平面波形式，在 $x$ 方向是中心平移了 $-k_y l_B^2$ 的谐振子波函数。因此能谱在 $y$ 方向是高度简并的，每一个容许的 $k_y$ 都对应一套完全相同的 $n$ 阶谐振子能谱。</p>
+            <p>由波函数必须落在宏观尺寸 $L_x$ 的样本内，要求振子中心 $-k_y l_B^2 \in [0, L_x]$。结合周期性边界条件 $\Delta k_y = \frac{2\pi}{L_y}$，可计算出同一能级（即单个 Landau 能级）容纳的状态数 $N$：</p>
+            $$ N = \frac{L_x}{l_B^2 \Delta k_y} = \frac{L_x}{l_B^2 \left(\frac{2\pi}{L_y}\right)} = \frac{L_x L_y}{2\pi l_B^2} = \frac{L_x L_y B}{2\pi \frac{\hbar}{e}} = \frac{AB}{h/e} = \frac{\Phi}{\Phi_0} $$
+            <p>其中 $\Phi = AB$ 是穿过样本的总磁通量，$\Phi_0 = \frac{h}{e} = \frac{2\pi\hbar}{e}$ 为磁通量子（单电子）。</p>
+            <p><strong>用 Aharonov-Bohm 效应解释：</strong></p>
+            <p>在经典图像中，电子在磁场中做回旋运动。我们可以将每个回旋轨道看作一个闭合路径。根据 A-B 效应结论，电子每回旋一圈，磁矢势带来的相位贡献为：</p>
+            $$ \Delta \phi = \frac{e}{\hbar} \oint \vec{A} \cdot d\vec{l} = \frac{e}{\hbar} \Phi_{orbit} $$
+            <p>为了使电子波函数在轨道闭合时发生<strong>相干相长（形成驻波态/稳态）</strong>，这个拓扑相位必须是 $2\pi$ 的整数倍。将整个平面看作众多紧密排布的回旋轨道的集合，当总磁通 $\Phi / \Phi_0 = |N|$ 时，整个区域正好能容纳 $N$ 个满足相干相长条件的独立轨道状态（相位相差 $2\pi N$）。这就从拓扑相位（A-B 相位）的角度直观地解释了 Landau 能级的宏观简并度本质上是磁通量子化的体现。</p>
+
+            <div class="kp-box">
+                <strong>物理图像升华（拓扑与规范场）：</strong><br>
+                1. <strong>规范不变性：</strong> 无论我们选 Coulomb 规范还是 Landau 规范，最终计算出的物理量（如干涉条纹位移、能级简并度）只依赖于闭合环路积分 $\oint \vec{A} \cdot d\vec{l}$，这正是物理量必须满足规范不变性的体现。<br>
+                2. <strong>Berry 相位（Berry Phase）的雏形：</strong> A-B 相位是一个典型的几何相位（拓扑相位），它只取决于路径包围的磁通量，而与电子运动的速度、时间长短无关。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+<!-- ⬇️ 模块开始：Berry 相位第一题 ⬇️ -->
+    <section id="berry-01">
+        <div class="card">
+            <h2>Berry 相位、Berry 曲率与含时磁场中的自旋 1/2 粒子</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+                八. （本题 10 分）考虑一个依赖于二维参数 $\mathbf{R} = (R_1, R_2)$ 的哈密顿 $H(\mathbf{R})$，这个参数 $\mathbf{R} = \mathbf{R}(t)$ 会随时间变化，但是在任何取值下 $H(\mathbf{R})$ 都是无简并的。设从 $t_i$ 时刻到 $t_f$ 时刻参数 $\mathbf{R}$ 缓慢随时间改变，且其变化构成了一个闭合回路，即 $\mathbf{R}(t_i) = \mathbf{R}(t_f)$。
+                <p><strong>a.</strong> 设初始时刻体系处于 $H(\mathbf{R}(t_i))$ 的某一个瞬时本征态 $|n(\mathbf{R}(t_i))\rangle$，试写出在这一个绝热演化循环中体系所累积的 Berry 相位的表达式。（3 分）</p>
+                <p><strong>b.</strong> 试写出相应的 Berry 矢势 (Berry Vector Potential) 和 Berry 曲率 (Berry Curvature) 的表达式，并解释 Berry 曲率，Berry 矢势，Berry 相位与磁场强度，电磁矢势，磁通量之间具有何种类似关系。（3 分）</p>
+                <p><strong>c.</strong> 今考虑一个自旋 $1/2$ 粒子在含时磁场中的问题，其哈密顿是 $H = -\mathbf{B} \cdot \boldsymbol{\sigma}$，其中磁场 $\mathbf{B}$ 的大小恒定，而方位角 $(\theta, \phi)$ 随时间变化。试写出下能态的表达式，并计算它所对应的 Berry Curvature $F_{\theta\phi}$，以及相应的 Berry Curvature 在整个单位球面上的积分。（3 分）</p>
+                <p><strong>d.</strong> 试解释前述所求到的积分为什么不等于零？具体来讲，说明这一结果与 Stokes 定理之间的关系。（1 分）</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <h3>(a) 绝热演化中的 Berry 相位表达式</h3>
+            <p>设系统经历一个闭合回路 $C$，初始处于第 $n$ 个瞬时本征态 $|n(\mathbf{R})\rangle$。在绝热演化一个周期后，除了积累动力学相位外，还会额外积累一个纯几何的 <strong>Berry 相位（Berry Phase）</strong>：</p>
+            $$ \gamma_n = i \oint_C \langle n(\mathbf{R}) | \nabla_{\mathbf{R}} | n(\mathbf{R}) \rangle \cdot d\mathbf{R} $$
+
+            <h3>(b) Berry 矢势与 Berry 曲率及电磁学类比</h3>
+            <p><strong>1. Berry 矢势（Berry Vector Potential / 贝里联络）：</strong></p>
+            $$ \mathbf{A}_n(\mathbf{R}) = i \langle n(\mathbf{R}) | \nabla_{\mathbf{R}} | n(\mathbf{R}) \rangle $$
+            <p>类比关系：对应于电磁学中的<strong>电磁矢势 $\mathbf{A}$</strong>。</p>
+
+            <p><strong>2. Berry 曲率（Berry Curvature）：</strong><br>
+            以分量形式表示为反对称张量：</p>
+            $$
+            \begin{aligned}
+            [F_n]_{jk} &= i \left[ \langle \nabla_j n(\mathbf{R}) | \nabla_k n(\mathbf{R}) \rangle - \langle \nabla_k n(\mathbf{R}) | \nabla_j n(\mathbf{R}) \rangle \right] \\
+            &= \frac{\partial}{\partial R_j} [A_n]_k - \frac{\partial}{\partial R_k} [A_n]_j
+            \end{aligned}
+            $$
+            <p>类比关系：对应于电磁学中的<strong>磁场强度 $\mathbf{B}$</strong>（或电磁张量 $F_{\mu\nu}$），满足 $\mathbf{B} = \nabla \times \mathbf{A}$（即 $B_i = \frac{1}{2}\epsilon_{ijk}F_{jk}$）。</p>
+
+            <p><strong>3. Berry 相位与电磁学的综合类比：</strong></p>
+            $$ \gamma_n = \oint_C \mathbf{A}_n \cdot d\mathbf{R} = \iint_S \mathbf{F}_n \cdot d\mathbf{S} $$
+            <p>类比关系：对应于电磁学中的<strong>磁通量 $\Phi = \int \mathbf{B} \cdot d\mathbf{S} = \oint \mathbf{A} \cdot d\mathbf{r}$</strong>。</p>
+
+            <h3>(c) 自旋 1/2 粒子的 Berry 曲率积分</h3>
+            <p>哈密顿量 $H = -\mathbf{B} \cdot \boldsymbol{\sigma}$，将其写为矩阵形式：</p>
+            $$ 
+            H = -|B| (\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta) \cdot \boldsymbol{\sigma} = -|B| \begin{pmatrix} \cos\theta & \sin\theta e^{-i\phi} \\ \sin\theta e^{i\phi} & -\cos\theta \end{pmatrix} 
+            $$
+            <p>求解本征值方程，久期方程 $\lambda^2 - \cos^2\theta - \sin^2\theta = 0 \implies \lambda = \pm 1$。下能态对应的本征值为 $-|B|$（即 $\lambda = 1$），设其本征态为 $|-\rangle$：</p>
+            $$ |-\rangle = \begin{pmatrix} \sin\frac{\theta}{2} \\ -\cos\frac{\theta}{2} e^{i\phi} \end{pmatrix} $$
+            <p><strong>计算 Berry 矢势分量：</strong></p>
+            <p>对 $\theta$ 分量：</p>
+            $$
+            \begin{aligned}
+            A_\theta &= i \langle - | \partial_\theta | - \rangle = i \left( \sin\frac{\theta}{2}, \, -\cos\frac{\theta}{2} e^{-i\phi} \right) \begin{pmatrix} \frac{1}{2}\cos\frac{\theta}{2} \\ \frac{1}{2}\sin\frac{\theta}{2} e^{i\phi} \end{pmatrix} \\
+            &= i \left( \frac{1}{2}\sin\frac{\theta}{2}\cos\frac{\theta}{2} - \frac{1}{2}\sin\frac{\theta}{2}\cos\frac{\theta}{2} \right) = 0
+            \end{aligned}
+            $$
+            <p>对 $\phi$ 分量：</p>
+            $$
+            \begin{aligned}
+            A_\phi &= i \langle - | \partial_\phi | - \rangle = i \left( \sin\frac{\theta}{2}, \, -\cos\frac{\theta}{2} e^{-i\phi} \right) \begin{pmatrix} 0 \\ -i\cos\frac{\theta}{2} e^{i\phi} \end{pmatrix} \\
+            &= i \left( i \cos^2\frac{\theta}{2} \right) = -\cos^2\frac{\theta}{2}
+            \end{aligned}
+            $$
+            <p><strong>计算 Berry 曲率：</strong></p>
+            $$ F_{\theta\phi} = \partial_\theta A_\phi - \partial_\phi A_\theta = \frac{\partial}{\partial \theta} \left(-\cos^2\frac{\theta}{2}\right) - 0 = 2\cos\frac{\theta}{2}\sin\frac{\theta}{2} \cdot \frac{1}{2} = \frac{1}{2}\sin\theta $$
+            <p><strong>计算整个单位球面上的积分（第一陈数相关）：</strong></p>
+            $$ \iint F_{\theta\phi} d\theta d\phi = \int_0^{2\pi} d\phi \int_0^\pi \frac{1}{2}\sin\theta d\theta = 2\pi \left[ -\frac{1}{2}\cos\theta \right]_0^\pi = 2\pi \left(\frac{1}{2} - \left(-\frac{1}{2}\right)\right) = 2\pi $$
+
+            <h3>(d) 积分不为零的拓扑原因与 Stokes 定理失效</h3>
+            <p><strong>为何不等于零：</strong> 上述积分等于 $2\pi \neq 0$，原因在于参数空间（动量空间）的中心 $|\mathbf{B}|=0$ 处存在一个类似于强度为 $1/2$ 的<strong>磁单极子（Magnetic Monopole）</strong>。无单极子时 $\nabla \cdot \mathbf{B} = 0$，而在原点处发生了能级交叉（简并），相当于 $\nabla \cdot \mathbf{B} \propto \delta(\mathbf{r})$ 有源。</p>
+            <p><strong>与 Stokes 定理的矛盾与解释：</strong> <br>
+            根据经典 Stokes 定理，闭合曲面上的旋度积分应等于其边界上的线积分。既然是在完整球面上积分，边界收缩为一点，线积分应为 $0$。产生矛盾的原因是 <strong>Stokes 定理要求矢量场 $\mathbf{A}$ 在整个曲面上处处光滑非奇异</strong>。<br>
+            观察本题求得的态矢量 $|-\rangle = \binom{\sin(\theta/2)}{-\cos(\theta/2)e^{i\phi}}$。当 $\theta \to 0$（北极点）时，态矢量变为 $\binom{0}{-e^{i\phi}}$，这里的相位 $\phi$ 是完全没有定义的（多值性），导致 Berry 矢势 $\mathbf{A}$ 在北极点具有奇异性（即<strong>狄拉克弦 Dirac String</strong> 穿过此处）。<br>
+            由于无法在整个球面上找到一个无奇点的全局规范（Global Gauge），必须采用 <strong>Wu-Yang 字典（分片规范）</strong>，分别在南北半球定义 $\mathbf{A}_N$ 和 $\mathbf{A}_S$。正是这种规范连接处的拓扑阻碍，导致了非零的陈数 $C_1 = \frac{1}{2\pi} \iint F_{\theta\phi} d\theta d\phi = 1$。</p>
+
+            <div class="kp-box">
+                <strong>拓扑量子物理的基石：</strong><br>
+                1. <strong>陈数（Chern Number）：</strong> 本题算出的积分除以 $2\pi$ 就是第一陈数。陈数只能是整数，它是一个拓扑不变量。这意味着只要哈密顿量不发生能级闭合，无论你如何微调磁场 $\mathbf{B}$ 的形式，球面上的积分永远严格等于 $2\pi$。<br>
+                2. <strong>量子霍尔效应：</strong> 1982年，Thouless 等人（TKNN数）证明了量子霍尔效应中的霍尔电导平台正是源于布里渊区上的 Berry 曲率积分（陈数）。这道“含时磁场中的自旋粒子”模型，正是理解拓扑绝缘体最精简、最完美的数学玩具。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+
+<!-- ⬇️ 模块开始：散射理论第一题 ⬇️ -->
+    <section id="scattering-01">
+        <div class="card">
+            <h2>散射截面、Lippmann-Schwinger 积分方程与 Born 近似</h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+                1. 考虑在一个三维中心势场 $V(r)$ 中的散射问题，入射粒子从 $z$ 轴负无穷远处沿着 $z$ 轴正方向以动量 $\hbar k$ 入射。
+                <p><strong>(a)</strong> 试简要叙述微分散射截面和总散射截面的概念。</p>
+                <p><strong>(b)</strong> 回到主问中考虑最一般的情况，试解释散射定态的概念，并写出对应于这一问题的散射定态应具有何种形式。怎样从这一散射定态出发写出散射截面？</p>
+                <p><strong>(c)</strong> 试推导写出散射定态所应满足的积分方程，写出其直到二阶的 Born 级数解的形式，并解释什么是 Born 近似。</p>
+                <p><strong>(d)</strong> 在 Born 近似下，求有限深势阱的微分散射截面：$V(r) = V_0, \; r < a$; $\; V(r) = 0, \; r > a$。</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <h3>(a) 微分散射截面与总散射截面的概念</h3>
+            <p><strong>微分散射截面 (Differential Cross Section, DCS)：</strong> 偏转角在 $[\theta, \theta+d\theta]$ 方向的粒子，一定是由瞄准距离在 $[b, b+db]$ 的同心圆环上的粒子散射而来的。由此，把在立体角 $d\Omega$ 上探测到的粒子数，归结为对应无穷远处垂直入射截面上的面积微元，这个面积微元即为微分散射截面 $\sigma(\theta, \phi)$。</p>
+            $$ \sigma(\theta, \phi) = \frac{dn}{F_i d\Omega}, \quad (其中 dn = dN_{\text{scatter}}/dt) $$
+            <p><strong>总散射截面 (Total Cross Section)：</strong> 对所有的微分散射截面在整个 $4\pi$ 立体角上进行积分：$\sigma_T = \int \sigma(\theta, \phi) d\Omega$。</p>
+
+            <h3>(b) 散射定态与散射截面的推导</h3>
+            <p><strong>散射定态：</strong> 称满足无穷远处的定态 Schrödinger 方程，同时符合物理问题所要求的“无穷远处渐近行为”的解为散射定态。本题中，当 $r \to \infty$ 时，其渐近形式为：</p>
+            $$ \psi_k^{\text{diff}}(\vec{r}) \xrightarrow{r \to \infty} e^{ikz} + f_k(\theta, \phi) \frac{e^{ikr}}{r} $$
+            <p>第一项为<strong>平面入射波</strong>，第二项为<strong>出射球面波</strong>，$f_k(\theta, \phi)$ 是依赖于势场 $V(r)$ 的<strong>散射振幅</strong>。</p>
+            <p><strong>计算概率流密度 $\vec{J}(\vec{r})$：</strong> 公式为 $\vec{J} = \frac{\hbar}{\mu} \text{Re}[\psi^* (-i\nabla)\psi]$ （其中 $\mu$ 为约化质量）。</p>
+            <ul>
+                <li><strong>入射波：</strong> $\vec{J}_i = \frac{\hbar}{\mu} \text{Re}[e^{-ikz}(-i\nabla)e^{ikz}] = \frac{\hbar k}{\mu} \hat{z}$。入射通量 $F_i$ 正比于 $|\vec{J}_i|$，即 $F_i = C \frac{\hbar k}{\mu}$。</li>
+                <li><strong>散射波：</strong> 在球坐标系中计算梯度 $\nabla$。由于探测器放在极远处 ($r \to \infty$)，$\frac{1}{r}\frac{\partial}{\partial \theta}$ 和 $\frac{1}{r\sin\theta}\frac{\partial}{\partial \phi}$ 项产生的流密度正比于 $1/r^3$，可忽略（且非径向）。只保留径向项 $\frac{\partial}{\partial r}$：
+                $$ [\vec{J}_{\text{sc}}]_r = \frac{\hbar}{\mu} \text{Re} \left[ f_k^* \frac{e^{-ikr}}{r} (-i) \frac{i k e^{ikr} r - e^{ikr}}{r^2} f_k \right] \approx \frac{\hbar k}{\mu r^2} |f_k(\theta, \phi)|^2 $$
+                </li>
+            </ul>
+            <p>相应地，单位时间通过极远处立体角 $d\Omega$ 探测器的粒子数为 $dn = C \cdot J_{\text{sc}} \cdot dS = C \cdot J_{\text{sc}} \cdot r^2 d\Omega = C \frac{\hbar k}{\mu} |f_k(\theta, \phi)|^2 d\Omega$。<br>
+            代入微分散射截面定义式：</p>
+            $$ \sigma(\theta, \phi) = \frac{dn}{F_i d\Omega} = \frac{C \frac{\hbar k}{\mu} |f_k|^2 d\Omega}{C \frac{\hbar k}{\mu} d\Omega} = |f_k(\theta, \phi)|^2 $$
+
+            <h3>(c) Lippmann-Schwinger 积分方程与 Born 近似</h3>
+            <p>薛定谔方程 $[-\frac{\hbar^2}{2\mu}\nabla^2 + V(\vec{r})]\psi(\vec{r}) = E\psi(\vec{r})$。令 $E = \frac{\hbar^2 k^2}{2\mu}$，引入 $U(\vec{r}) = \frac{2\mu}{\hbar^2}V(\vec{r})$，可改写为：</p>
+            $$ [\nabla^2 + k^2]\psi(\vec{r}) = U(\vec{r})\psi(\vec{r}) $$
+            <p>定义算子 $[\nabla^2 + k^2]$ 的逆为格林函数 (Green's function)，满足 $[\nabla^2 + k^2]G(\vec{r}) = \delta(\vec{r})$。微分方程可转化为形式积分方程通解：</p>
+            $$ \psi(\vec{r}) = \psi_0(\vec{r}) + \int d^3\vec{r}' G_+(\vec{r} - \vec{r}') U(\vec{r}') \psi(\vec{r}') $$
+            <p>其中 $\psi_0(\vec{r}) = e^{i\vec{k}_i \cdot \vec{r}}$ 是满足齐次方程的平面波，选取向外辐射的球面波格林函数 $G_+(\vec{r} - \vec{r}') = -\frac{1}{4\pi}\frac{e^{ik|\vec{r} - \vec{r}'|}}{|\vec{r} - \vec{r}'|}$。这便是 <strong>Lippmann-Schwinger 方程</strong>：</p>
+            $$ \psi_k(\vec{r}) = e^{i\vec{k}_i \cdot \vec{r}} - \frac{1}{4\pi} \int d^3\vec{r}' \frac{e^{ik|\vec{r} - \vec{r}'|}}{|\vec{r} - \vec{r}'|} U(\vec{r}') \psi_k(\vec{r}') $$
+            <p><strong>Born 级数与 Born 近似：</strong><br>
+            通过将 $\psi_k$ 在积分号内反复迭代，可以得到 <strong>Born 级数解</strong>：</p>
+            $$ \psi_k(\vec{r}) = e^{i\vec{k}_i \cdot \vec{r}} + \int d^3\vec{r}_1 G_+ U e^{i\vec{k}_i \cdot \vec{r}_1} + \int d^3\vec{r}_1 \int d^3\vec{r}_2 G_+ U G_+ U e^{i\vec{k}_i \cdot \vec{r}_2} + \dots $$
+            <p>当势场很弱（或入射能量很高）时，只取第一阶积分，即用平面波 $e^{i\vec{k}_i \cdot \vec{r}'}$ 代替积分内的真实波函数 $\psi_k(\vec{r}')$，这就是 <strong>一阶 Born 近似</strong>。<br>
+            取 $r \to \infty$ 的渐近近似，令动量转移 $\vec{K} = \vec{k}_d - \vec{k}_i$，可得 Born 近似下的散射振幅：</p>
+            $$ f_k^{(B)}(\theta, \phi) = -\frac{1}{4\pi} \int d^3\vec{r}' e^{-i\vec{K} \cdot \vec{r}'} U(\vec{r}') = -\frac{\mu}{2\pi\hbar^2} \int d^3\vec{r}' e^{-i\vec{K} \cdot \vec{r}'} V(\vec{r}') $$
+            <p>即：<strong>一阶 Born 近似下的散射振幅，正比于散射势场 $V(\vec{r})$ 的三维傅里叶变换。</strong></p>
+
+            <h3>(d) 有限深球方势阱的散射截面 (Born近似)</h3>
+            <p>已知势场 $V(r) = V_0 \; (0 < r < a)$，在其他区域为 $0$。微分散射截面为 $\sigma^{(B)}(\theta, \phi) = |f_k^{(B)}(\theta, \phi)|^2$。<br>
+            我们需要计算 $V(r)$ 的三维傅里叶变换。取动量转移 $\vec{K}$ 的方向为球坐标积分的极轴 ($z'$ 轴)，则 $\vec{K} \cdot \vec{r}' = K r' \cos\theta'$：</p>
+            $$
+            \begin{aligned}
+            \int d^3\vec{r}' e^{-i\vec{K} \cdot \vec{r}'} V(r') &= V_0 \int_0^a r'^2 dr' \int_0^{2\pi} d\phi' \int_0^\pi e^{-iKr'\cos\theta'} \sin\theta' d\theta' \\
+            &= 2\pi V_0 \int_0^a r'^2 dr' \left[ \frac{e^{-iKr'\cos\theta'}}{iKr'} \right]_{\pi}^0 = \frac{4\pi V_0}{K} \int_0^a r' \sin(Kr') dr'
+            \end{aligned}
+            $$
+            <p>利用分部积分法 $\int x\sin(Kx)dx = \frac{\sin(Kx)}{K^2} - \frac{x\cos(Kx)}{K}$，代入上式：</p>
+            $$ \int d^3\vec{r}' e^{-i\vec{K} \cdot \vec{r}'} V(r') = \frac{4\pi V_0}{K^3} \Big[ \sin(Ka) - Ka\cos(Ka) \Big] $$
+            <p>代回散射振幅公式，并取绝对值平方，得到微分散射截面：</p>
+            $$ \sigma^{(B)}(\theta) = \frac{4\mu^2 V_0^2}{\hbar^4 K^6} \Big[ \sin(Ka) - Ka\cos(Ka) \Big]^2 $$
+            <p>其中动量转移大小 $K = |\vec{k}_d - \vec{k}_i| = 2k\sin\frac{\theta}{2}$，$\theta$ 为散射角。</p>
+
+            <div class="kp-box">
+                <strong>物理图像升华（波动光学类比）：</strong><br>
+                1. <strong>惠更斯原理 (Huygens' Principle)：</strong> 在 Lippmann-Schwinger 方程的积分项 $\int G_+(\vec{r}-\vec{r}') U(\vec{r}') e^{i\vec{k}_i \cdot \vec{r}'} d^3\vec{r}'$ 中，可以看作：在 $\vec{r}'$ 处的势场 $U(\vec{r}')$ 被入射平面波激发，成为了“次波源”。这些次波源发出球面波 $G_+$ 传播到观察点 $\vec{r}$，其初始相位为 $e^{i\vec{k}_i \cdot \vec{r}'}$，振幅正比于 $U(\vec{r}')$。<br>
+                2. <strong>高频衍射极限：</strong> 第 (d) 问算出的球方势阱截面公式中，包含了振荡因子 $[\sin(Ka)-Ka\cos(Ka)]^2$。这在数学和物理上完全等价于光学中的<strong>三维圆球小孔衍射模型</strong>，这正是物质波特性的完美体现！
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
+<!-- ⬇️ 模块开始：散射理论第二题 ⬇️ -->
+    <section id="scattering-02">
+        <div class="card">
+            <h2>汤川势的 Born 近似与卢瑟福散射公式 <span style="color: red;">⭐⭐</span></h2>
+            
+            <div class="problem-box">
+                <strong>题目内容：</strong><br>
+                2. 考虑如下的汤川势 (Yukawa Potential):
+                $$ V(r) = V_0 \frac{e^{-ar}}{r}, \quad\quad $$
+                其中 $V_0$ 和 $a$ 是实常数，并且 $a$ 是正的。汤川势的作用范围是有限的，由 $a$ 决定：$r_0 = 1/a$ <strong>（特征长度）</strong>。当 $a \to 0$ 时，汤川势趋向于库仑势。
+                <p><strong>(a)</strong> 在 Born 近似下求散射振幅；</p>
+                <p><strong>(b)</strong> 求微分散射截面和总散射截面；</p>
+                <p><strong>(c)</strong> 取 $V_0 = \frac{Z_1 Z_2 e^2}{4\pi\varepsilon_0}$，然后令 $a \to 0$，求此时的微分散射截面（所得结果即为卢瑟福公式）。</p>
+            </div>
+
+            <!-- 答案区域占位 -->
+<!-- 答案区域开始 -->
+            <h3>(a) 在 Born 近似下求散射振幅</h3>
+            <p>由一阶 Born 近似公式可知，散射振幅正比于势场的三维傅里叶变换：</p>
+            $$ f_k^{(B)}(\theta, \phi) = -\frac{1}{4\pi} \int d^3\vec{r}_1 e^{-i\vec{k}_d \cdot \vec{r}_1} U(\vec{r}_1) e^{i\vec{k}_i \cdot \vec{r}_1} = -\frac{1}{4\pi} \int d^3\vec{r}_1 \exp[-i\vec{K} \cdot \vec{r}_1] U(\vec{r}_1) $$
+            <p>其中 $U(r) = \frac{2\mu}{\hbar^2}V(r)$，动量转移 $\vec{K} = \vec{k}_d - \vec{k}_i$，且大小满足 $|\vec{K}| = 2k\sin\frac{\theta}{2}$。</p>
+            <p>代入汤川势 $V(r) = V_0 \frac{e^{-ar}}{r}$，由于积分只依赖于 $|\vec{K}|$，我们可以通过坐标旋转将 $\vec{K}$ 放置在极轴（$z$ 轴）上，使得 $\vec{K} \cdot \vec{r}_1 = K r_1 \cos\theta_1$：</p>
+            $$
+            \begin{aligned}
+            f_k^{(B)}(\theta, \phi) &= -\frac{1}{4\pi} \int_0^\infty dr_1 \int_0^\pi d\theta_1 \int_0^{2\pi} d\phi_1 \, r_1^2 \sin\theta_1 \frac{2\mu}{\hbar^2} V_0 \frac{e^{-ar_1}}{r_1} e^{-i K r_1 \cos\theta_1} \\
+            &= -\frac{1}{4\pi} \cdot \frac{2\mu V_0}{\hbar^2} \cdot 2\pi \int_0^\infty dr_1 \, r_1 e^{-ar_1} \int_0^\pi d\theta_1 \sin\theta_1 e^{-i K r_1 \cos\theta_1}
+            \end{aligned}
+            $$
+            <p>先对角度 $\theta_1$ 积分，令 $y = \cos\theta_1$：</p>
+            $$ \int_0^\pi \sin\theta_1 e^{-iKr_1\cos\theta_1} d\theta_1 = \int_{-1}^1 e^{-iKr_1 y} dy = \frac{1}{-iKr_1} \left( e^{-iKr_1} - e^{iKr_1} \right) $$
+            <p>将角度积分结果代回径向积分：</p>
+            $$
+            \begin{aligned}
+            f_k^{(B)}(\theta, \phi) &= -\frac{\mu V_0}{\hbar^2} \int_0^\infty dr_1 \, r_1 e^{-ar_1} \frac{1}{-iKr_1} \left( e^{-iKr_1} - e^{iKr_1} \right) \\
+            &= \frac{\mu V_0}{iK\hbar^2} \int_0^\infty dr_1 \left( e^{-(a+iK)r_1} - e^{-(a-iK)r_1} \right) \\
+            &= \frac{\mu V_0}{iK\hbar^2} \left[ \frac{e^{-(a+iK)r_1}}{-(a+iK)} \bigg|_0^\infty - \frac{e^{-(a-iK)r_1}}{-(a-iK)} \bigg|_0^\infty \right] \\
+            &= \frac{\mu V_0}{iK\hbar^2} \left( \frac{1}{a+iK} - \frac{1}{a-iK} \right) = \frac{\mu V_0}{iK\hbar^2} \left( \frac{-2iK}{a^2+K^2} \right)
+            \end{aligned}
+            $$
+            <p>代入 $K^2 = 4k^2\sin^2\frac{\theta}{2}$，得到汤川势的散射振幅：</p>
+            $$ f_k^{(B)}(\theta) = -\frac{2\mu V_0}{\hbar^2} \frac{1}{a^2 + K^2} = -\frac{2\mu V_0}{\hbar^2} \frac{1}{a^2 + 4k^2\sin^2\frac{\theta}{2}} $$
+
+            <h3>(b) 求微分散射截面和总散射截面</h3>
+            <p><strong>微分散射截面：</strong></p>
+            $$ \sigma^{(B)}(\theta, \phi) = |f_k^{(B)}(\theta)|^2 = \frac{4\mu^2 V_0^2}{\hbar^4} \frac{1}{\left[ a^2 + 4k^2\sin^2\frac{\theta}{2} \right]^2} $$
+            <p><strong>总散射截面：</strong></p>
+            $$ \sigma_T^{(B)} = \int d\Omega \, \sigma^{(B)}(\theta, \phi) = \frac{4\mu^2 V_0^2}{\hbar^4} \cdot 2\pi \int_0^\pi \frac{\sin\theta}{\left[ a^2 + 4k^2\sin^2\frac{\theta}{2} \right]^2} d\theta $$
+            <p>为了计算积分，令 $\xi = \sin^2\frac{\theta}{2}$，则 $d\xi = \sin\frac{\theta}{2}\cos\frac{\theta}{2} d\theta = \frac{1}{2}\sin\theta d\theta \implies \sin\theta d\theta = 2d\xi$。<br>
+            当 $\theta \in [0, \pi]$ 时，$\xi \in [0, 1]$。积分变为：</p>
+            $$ \sigma_T^{(B)} = \frac{4\mu^2 V_0^2}{\hbar^4} \cdot 4\pi \int_0^1 \frac{d\xi}{(a^2 + 4k^2\xi)^2} $$
+            <p>再令 $\eta = a^2 + 4k^2\xi$，则 $d\eta = 4k^2 d\xi$，上下限变为 $[a^2, a^2+4k^2]$：</p>
+            $$
+            \begin{aligned}
+            \sigma_T^{(B)} &= \frac{16\pi\mu^2 V_0^2}{\hbar^4} \frac{1}{4k^2} \int_{a^2}^{a^2+4k^2} \frac{1}{\eta^2} d\eta = \frac{4\pi\mu^2 V_0^2}{\hbar^4 k^2} \left[ -\frac{1}{\eta} \right]_{a^2}^{a^2+4k^2} \\
+            &= \frac{4\pi\mu^2 V_0^2}{\hbar^4 k^2} \left( \frac{1}{a^2} - \frac{1}{a^2+4k^2} \right) = \frac{4\pi\mu^2 V_0^2}{\hbar^4 k^2} \frac{4k^2}{a^2(a^2+4k^2)} \\
+            &= \frac{16\pi\mu^2 V_0^2}{\hbar^4 a^2 (a^2+4k^2)}
+            \end{aligned}
+            $$
+
+            <h3>(c) 取极限 $a \to 0$ 推导卢瑟福散射公式</h3>
+            <p>取 $V_0 = \frac{Z_1 Z_2 e^2}{4\pi\varepsilon_0}$，代入 (b) 问的微分散射截面中：</p>
+            $$ \sigma^{(B)}(\theta) = \frac{4\mu^2}{\hbar^4} \left( \frac{Z_1 Z_2 e^2}{4\pi\varepsilon_0} \right)^2 \frac{1}{\left[ a^2 + 4k^2\sin^2\frac{\theta}{2} \right]^2} $$
+            <p>令屏蔽参数 $a \to 0$（即汤川势的作用距离 $r_0 \to \infty$，退化为库仑势）：</p>
+            $$
+            \begin{aligned}
+            \sigma^{(B)}(\theta) &\xrightarrow{a \to 0} \frac{4\mu^2}{\hbar^4} \left( \frac{Z_1 Z_2 e^2}{4\pi\varepsilon_0} \right)^2 \frac{1}{\left[ 4k^2\sin^2\frac{\theta}{2} \right]^2} \\
+            &= \left( \frac{e^2}{4\pi\varepsilon_0} \right)^2 \frac{Z_1^2 Z_2^2 \cdot 4\mu^2}{\hbar^4 \cdot 16k^4 \sin^4\frac{\theta}{2}}
+            \end{aligned}
+            $$
+            <p>利用系统能量与波矢的关系 $E = \frac{\hbar^2 k^2}{2\mu} \implies \hbar^4 k^4 = 4\mu^2 E^2$，代入分母：</p>
+            $$ \sigma^{(B)}(\theta) = \left( \frac{e^2}{4\pi\varepsilon_0} \right)^2 \frac{Z_1^2 Z_2^2 \cdot 4\mu^2}{16 (4\mu^2 E^2) \sin^4\frac{\theta}{2}} = \left( \frac{Z_1 Z_2 e^2}{4\pi\varepsilon_0} \right)^2 \frac{1}{16 E^2 \sin^4\frac{\theta}{2}} $$
+            <p>这正是经典的<strong>卢瑟福散射截面公式 (Rutherford Scattering Formula)</strong>。</p>
+
+            <div class="kp-box">
+                <strong>高量 / 粒子物理 重点关联：</strong><br>
+                1. <strong>屏蔽库仑势与红外发散：</strong> 如果直接对库仑势 $V \propto 1/r$ 求傅里叶变换，积分在无穷远处是不收敛的（这也是为什么单纯的库仑势无法计算“总散射截面”，它的 $\sigma_T \to \infty$）。引入因子 $e^{-ar}$ 就相当于给库仑势加了一个“屏蔽效应”。数学上，这是一种正规化（Regularization）手段。<br>
+                2. <strong>汤川介子理论：</strong> 在核物理中，汤川势描述了核子之间通过交换<strong>有质量的介子（如 $\pi$ 介子）</strong>产生的强相互作用。特征长度 $r_0 = 1/a = \frac{\hbar}{m_\pi c}$ 代表了力的力程，它反比于交换粒子的质量。当 $a \to 0$ 时，意味着传递作用的粒子质量趋于 $0$（例如光子），此时相互作用就变成了长程的库仑力。
+            </div>
+            <!-- 答案区域结束 -->
+    </section>
+    <!-- ⬆️ 模块结束 ⬆️ -->
+
 
 
 
