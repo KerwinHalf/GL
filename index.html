@@ -400,6 +400,503 @@
             </div>
             <!-- 答案区域结束 -->
 
+<!-- ⬇️ 模块开始：知识点总结第二部分 ⬇️ -->
+    <section id="summary-02">
+        <div class="card">
+            <h2>量子动力学、三大绘景与有效哈密顿量总结</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本章总结了量子系统的时间演化规律。重点辨析了薛定谔、海森堡和相互作用三种绘景的异同，并提炼了利用 Dyson 级数处理高频振荡项（求有效 Hamiltonian）及旋波近似（RWA）的核心公式。
+            </div>
+
+            <!-- 节选一：时间演化算符与运动方程 -->
+            <h3>2.1 节选一：时间演化算符与 Ehrenfest 定理</h3>
+            <p><strong>时间演化算符 $U(t, t_0)$ 的三种情况（设 $\hbar = 1$）：</strong></p>
+            <ul>
+                <li>保守体系（Hamiltonian 不显含时间）：
+                    $$ U(t, t_0) = \exp[-iH(t - t_0)] $$
+                </li>
+                <li>Hamiltonian 含时，但在不同时刻对易 $[H(t), H(t')] = 0$：
+                    $$ U(t, t_0) = \exp\left[ -i \int_{t_0}^t H(\tau) d\tau \right] $$
+                </li>
+                <li>Hamiltonian 含时，且 $[H(t), H(t')] \neq 0$（需要 Dyson 级数迭代）：
+                    $$ U(t, t_0) = \mathcal{T} \exp\left[ -i \int_{t_0}^t H(\tau) d\tau \right] $$
+                    <span style="font-size: 0.9rem; color: #666;">（其中 $\mathcal{T}$ 为编时算子，把时间宗量大的 $H$ 放在左边前面）</span>
+                </li>
+            </ul>
+            <p><strong>Heisenberg 运动方程：</strong></p>
+            $$ \frac{d\langle A\rangle}{dt} = \left\langle \frac{\partial A}{\partial t} \right\rangle + \frac{1}{i\hbar} \langle [A, H] \rangle $$
+            <p><strong>Ehrenfest 定理：</strong> 设 $H = \frac{p^2}{2m} + V(R)$，量子期望值满足经典的牛顿运动定律形式：</p>
+            $$ \frac{d\langle R\rangle}{dt} = \frac{1}{i\hbar} \langle [R, H] \rangle = \frac{\langle p\rangle}{m} $$
+            $$ \frac{d\langle p\rangle}{dt} = \frac{1}{i\hbar} \langle [p, H] \rangle = -\langle \nabla V(R) \rangle $$
+
+            <!-- 节选二：三大绘景 -->
+            <h3>2.2 节选二：量子力学绘景 (Pictures)</h3>
+            <p><strong>定义：</strong> 描述系统动力学演化时的形式不同但物理上等价的观点。约定在 $t=t_0$ 时刻三种绘景完全重合：$|\psi^H(0)\rangle = |\psi^S(0)\rangle = |\psi^I(0)\rangle$ 且 $A^H(0) = A^S(0) = A^I(0)$。</p>
+
+            <p><strong>1. 薛定谔绘景 (Schrödinger Picture, S)：态矢量承担演化，算子不演化。</strong></p>
+            $$ |\psi^S(t)\rangle = U(t, t_0)|\psi^S(0)\rangle $$
+            $$ i\frac{\partial U^S(t, t_0)}{\partial t} = H(t)U^S(t, t_0), \quad U^S(t_0, t_0) = 1 $$
+
+            <p><strong>2. 海森堡绘景 (Heisenberg Picture, H)：算子承担演化，态矢量不演化。</strong></p>
+            $$ |\psi^H(t)\rangle = |\psi^H(0)\rangle = |\psi^S(0)\rangle $$
+            $$ A^H(t) = [U(t, t_0)]^\dagger A^S(t) U(t, t_0) $$
+            <p>相应的运动方程：$\frac{d|\psi^H\rangle}{dt} = 0$，且 $\frac{dA^H}{dt} = \frac{\partial A^H}{\partial t} + \frac{1}{i\hbar}[A^H(t), H^H(t)]$。</p>
+
+            <p><strong>3. 相互作用绘景 (Interaction Picture, I)：态和算子各分担一部分演化。</strong></p>
+            <p>设哈密顿量分为自由项与微扰项：$H^S = H_0^S + V^S$。自由演化算子记为 $U_0(t, t_0) = \mathcal{T}\exp[-i \int H_0^S(\tau) d\tau]$。</p>
+            $$ |\psi^I(t)\rangle = U_0^\dagger(t, t_0) |\psi^S(t)\rangle, \quad A^I(t) = U_0^\dagger(t, t_0) A^S(t) U_0(t, t_0) $$
+            <p>相互作用绘景下的时间演化算子 $U^I(t, t_0) = U_0^\dagger(t, t_0) U(t, t_0)$ 满足方程：</p>
+            $$ i\frac{dU^I}{dt} = V^I(t) U^I, \quad \text{其中 } V^I(t) = U_0^\dagger V^S U_0 $$
+            <p>而算子 $A^I$ 的运动方程只由 $H_0^I$ 决定：$\frac{dA^I}{dt} = \frac{\partial A^I}{\partial t} + \frac{1}{i\hbar}[A^I(t), H_0^I(t)]$。</p>
+
+            <p><strong>表象与绘景的区别：</strong><br>
+            表象（Representation）是选定一组 CSCO 的本征基矢，用矩阵来具体表达态和算子；绘景（Picture）不涉及基矢的选择，它讨论的是系统的时间演化如何在态和算子之间进行分配。</p>
+
+            <!-- 节选三：有效哈密顿量与旋波近似 -->
+            <h3>2.3 节选三：有效 Hamiltonian 与旋波近似</h3>
+            
+            <p><strong>Dyson 级数与有效哈密顿量（长期平均）：</strong><br>
+            考虑相互作用绘景下含有快变项的哈密顿量（设 $\hbar = 1$）：</p>
+            $$ H^I = Ae^{-i\omega t} + A^\dagger e^{i\omega t} $$
+            <p>Dyson 级数迭代公式为：$U_n(t) = 1 - i \int_0^t V^I(\tau) U_{n-1}(\tau) d\tau$。求解至二阶并进行长时间平均（滤去快变项）后，对比有效演化算子 $U_2(t) \approx 1 - i H_{\text{eff}}^I t$，可得有效哈密顿量：</p>
+            $$ H_{\text{eff}}^I = \frac{-1}{\omega} [A, A^\dagger] $$
+            <p>推广到多个频率分量 $H^I = \sum_{n=1}^N \left( A_n e^{-i\omega_n t} + A_n^\dagger e^{i\omega_n t} \right)$，其有效哈密顿量为：</p>
+            $$ H_{\text{eff}}^I = \sum_{n=1}^N \frac{-1}{\omega_n} [A_n, A_n^\dagger] $$
+
+            <p><strong>旋波近似 (Rotating Wave Approximation, RWA)：</strong><br>
+            在光与原子相互作用模型中，将快变项（能量不守恒项）去除，只留下慢变项（能量近似守恒项）的处理方法。例如：</p>
+            $$ V = g(a^\dagger + a)(\sigma_- + \sigma_+) \approx g(a^\dagger \sigma_- + a \sigma_+) $$
+            <p>这里去除了反旋波项 $g(a^\dagger \sigma_+ + a\sigma_-)$，因为它们对应同时产生光子和原子激发（或同时湮灭），在物理上是能量高度不守恒的快速振荡项（$\Delta E = \hbar(\omega + \Omega)$），对宏观时间演化贡献趋于零。</p>
+
+            <div class="kp-box">
+                <strong>笔记食用指南：</strong><br>
+                1. <strong>Ehrenfest 定理：</strong> 是量子力学回归经典力学的桥梁。薛定谔方程预言的不仅是概率，在期望值层面它完美复现了牛顿第二定律。<br>
+                2. <strong>相互作用绘景：</strong> 这是处理微扰论和量子光学（如 Jaynes-Cummings 模型）的标准起手式。所有的 Dyson 级数展开都是在相互作用绘景下进行的。<br>
+                3. <strong>有效哈密顿量公式：</strong> $H_{\text{eff}}^I = -\frac{1}{\omega}[A, A^\dagger]$ 是考试秒杀题目的利器！遇到快变外场（如交流 Stark 效应），直接代入此公式可以免去重新积分的痛苦。
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+<!-- ⬇️ 模块开始：知识点总结第三部分 ⬇️ -->
+    <section id="summary-03">
+        <div class="card">
+            <h2>密度矩阵理论 (Density Matrix Theory) 总结</h2>
+            
+            <div class="problem-box">
+                <strong>问题的提出：</strong><br>
+                如何在不能确切知道各个粒子状态的情况下，即基于不完备的知识，对着一体系进行量子力学的描述，而这种描述手段所给出的结果和预言，又要最大限度地体现这些不完备的知识？<br>
+                上述问题归结为：如何对一个整体体系的子体系进行量子力学描述，并由此描述得出相应的局域物理量的正确测量预言。<br>
+                <strong>纠缠 (Entanglement)：</strong> $|\psi(t)\rangle$ 不能写成 $|\psi_S\rangle \otimes |\psi_B\rangle$ 的直积形式。
+            </div>
+
+            <!-- 3.1 & 3.2 量子系综与纯态系综 -->
+            <h3>3.1 & 3.2 量子系综与纯态/混态</h3>
+            <p><strong>量子系综定义：</strong> $N$ 个微观粒子组成的状态集合，集合中粒子处于各种不同的、不一定相互正交的态上。假定集合的分布是：$n_i$ 个粒子处于 $|\psi_i\rangle$，称此集合为一个量子系综，记为 $\varepsilon = \left\{ |\psi_i\rangle, n_i, \sum_i n_i = N \right\}$。</p>
+            <p>当 $N \to \infty$ 时，一般记为经典概率分布：</p>
+            $$ \varepsilon = \left\{ |\psi_i\rangle, P_i, \sum_i P_i = 1 \right\} $$
+            <p><strong>纯态系综：</strong> 如果一个系综中，所有的体系复本都处在同一个量子状态 $|\psi\rangle$ 上，那么这个系统就被称为纯态系综，记为 $\varepsilon = \{ |\psi\rangle, P_{|\psi\rangle}=1 \}$。</p>
+            <p>反之，若干个纯态按一定几率分布进行非相干混合所得到的就是<strong>混态系综</strong>。</p>
+
+            <!-- 3.3 密度矩阵方法 -->
+            <h3>3.3 密度矩阵方法及其性质</h3>
+            <p>理论上不能以同一方式去处理纯态和混态是不完善的，因此引入密度矩阵方法以统一地表示纯态和混态（纯态只有量子相干性；混态包含经典非相干统计 + 量子相干性）。</p>
+            <p><strong>定义：</strong> 一个量子系综 $\varepsilon = \{|\psi_i\rangle, P_i\}$ 对应的密度矩阵为：</p>
+            $$ \rho = \sum_i P_i |\psi_i\rangle\langle\psi_i| $$
+            <p>即其所含纯态的投影算子的权重和。</p>
+            <p><strong>七大核心性质：</strong></p>
+            <ol style="line-height: 2;">
+                <li>$\rho$ 是厄米算符 (Hermitian)。</li>
+                <li>$\mathrm{Tr}\rho = 1$（迹为 1，代表总概率守恒）。</li>
+                <li>$\rho$ 半正定的。</li>
+                <li>物理量期望值：$\langle B \rangle = \mathrm{Tr}(\rho B)$。</li>
+                <li>$\mathrm{Tr}[\rho^2] \le 1$，<strong>取等号表示纯态</strong>。</li>
+                <li>$\rho$ 的运动方程（冯·诺依曼方程）：
+                    $$ \frac{d\rho}{dt} = \frac{1}{i\hbar}[H, \rho] $$
+                </li>
+                <li>密度矩阵的物理意义：在基 $\{|u_n\rangle\}$ 下 $\rho$ 的矩阵元为：
+                    $$ \rho_{nm} = \langle u_n | \left( \sum_i P_i |\psi_i\rangle\langle\psi_i| \right) | u_m \rangle $$
+                    <strong>对角元</strong> $\rho_{nn}$ 为 $|n\rangle$ 上的布居数 (Population)；<br>
+                    <strong>非对角元</strong> $\rho_{nm}$ 表示 $|u_n\rangle$ 和 $|u_m\rangle$ 之间的量子相干项 (Coherence)。
+                </li>
+            </ol>
+
+            <!-- 3.4 约化密度矩阵 -->
+            <h3>3.4 约化密度矩阵 (Reduced Density Matrix)</h3>
+            <p>考虑复合系统 $V = V_1 \otimes V_2$，基矢为 $|\alpha, \beta\rangle = |\alpha\rangle \otimes |\beta\rangle$。约化密度矩阵则是通过<strong>部分迹 (Partial Trace)</strong> 求得：</p>
+            $$ \rho_1 = \mathrm{Tr}_2 \rho, \quad \rho_2 = \mathrm{Tr}_1 \rho $$
+            <p><strong>注：</strong> 一般情况下 $\rho \neq \rho_1 \otimes \rho_2$。这是因为 $\rho_1, \rho_2$ 表述的是体系局部性质，而 $\rho$ 所体现的是整体性质（包括量子纠缠），这些纠缠性质在求部分迹时被损失了（退相干）。</p>
+
+            <!-- 3.5 期末对接 -->
+            <h3 style="color: #d84315; border-left-color: #d84315;">3.5 期末考点对接 (Q&A 速记)</h3>
+            <ul style="line-height: 1.8;">
+                <li><strong>什么是密度矩阵？</strong><br>形式上是纯态投影算符的权重和，公式为 $\rho = \sum_i P_i |\psi_i\rangle\langle\psi_i|$。</li>
+                <li><strong>什么是布洛赫矢量 (Bloch Vector)？</strong><br>球面上的一个单位矢量 $[\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta]$。</li>
+                <li><strong>密度矩阵的经典对应是什么？</strong><br>对应于经典统计力学中的<strong>相空间密度 $\rho(q,p)$</strong>，其运动方程对应于<strong>刘维尔定理 (Liouville's Theorem)</strong>。</li>
+                <li><strong>$\mathrm{Tr}\rho^2 \le 1$ 证明及等式成立代表什么？</strong><br>
+                    $$ \because \rho = \sum_i P_i |\psi_i\rangle\langle\psi_i| \implies \rho^2 = \sum_i P_i^2 |\psi_i\rangle\langle\psi_i| $$
+                    $$ \therefore \mathrm{Tr}\rho^2 = \sum_i P_i^2 \quad \because \sum_i P_i = 1 $$
+                    $$ \implies \mathrm{Tr}\rho^2 = \sum_i P_i^2 \le 1 $$
+                    当等式成立时表示存在某个 $P_i = 1$ 其它为 $0$，即对应的密度矩阵为 $\rho = |\psi_i\rangle\langle\psi_i|$ 是一个<strong>纯态</strong>；反之则存在统计平均，表示的是一个<strong>混态</strong>。
+                </li>
+                <li><strong>对自旋 1/2 粒子的纯态与混态用 Bloch 球描述：</strong><br>
+                    $$ \rho = \frac{1}{2}I + \frac{1}{2}\sum_i n_i \sigma_i $$
+                    其中由 $\mathrm{Tr}\rho^2 \le 1$ 可推出 $\sum_i n_i^2 \le 1$，$\vec{n}$ 即是密度矩阵的布洛赫矢量。布洛赫矢量的分量与泡利矩阵的关系为 $\langle \sigma_i \rangle = n_i$。
+                </li>
+                <li><strong>热力学系综的密度矩阵表示：</strong><br>
+                    微正则系综：$\rho = \frac{1}{\Omega(E)}$ <br>
+                    正则系综：$\rho = \frac{e^{-\beta H}}{Z}, \quad Z = \mathrm{Tr}\left[e^{-\beta H}\right]$
+                </li>
+            </ul>
+
+            <div class="kp-box">
+                <strong>复习划重点：</strong><br>
+                1. <strong>冯·诺依曼方程与海森堡方程的符号差异：</strong> 密度矩阵的运动方程是 $\frac{d\rho}{dt} = \frac{1}{i\hbar}[H, \rho]$，注意这里对易子的顺序与海森堡运动方程 $\frac{dA}{dt} = \frac{1}{i\hbar}[A, H]$ 正好差一个负号！因为 $\rho$ 是态的集合，类似薛定谔演化。<br>
+                2. <strong>迹的操作技巧：</strong> 考试中经常利用循环不变性 $\mathrm{Tr}(ABC) = \mathrm{Tr}(BCA)$ 来化简物理量的期望值 $\langle A \rangle = \mathrm{Tr}(\rho A)$。
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+<!-- ⬇️ 模块开始：知识点总结第四部分 ⬇️ -->
+    <section id="summary-04">
+        <div class="card">
+            <h2>Berry Phase (贝里相位) 与拓扑基础总结</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本章梳理了 Berry Phase 的一般理论框架，对比了其与经典电磁学的对应关系。重点总结了如何利用非对角矩阵元计算 Berry Curvature（避开规范选择难题），以及二能级系统（磁单极子模型）的规范连接与拓扑积分推导。
+            </div>
+
+            <!-- 4.1 Berry Phase 一般形式 -->
+            <h3>4.1 Berry Phase、矢势与曲率</h3>
+            <p><strong>一般形式的 Berry Phase：</strong></p>
+            $$ \gamma_n = i \int_{R_i}^{R_f} \langle n | \nabla_R n \rangle \cdot d\vec{R} $$
+            <p><strong>Berry Vector Potential (贝里联络)：</strong> $A_n = i \langle n | \nabla_R | n \rangle$。</p>
+            
+            <p><strong>规范变换 (Gauge Transformation)：</strong><br>
+            当本征态附加上一个与参数 $\vec{R}$ 相关的相位 $|R(t)\rangle \to e^{i\xi(R)}|n(R(t))\rangle$ 时，有：</p>
+            $$ \vec{A}_n \to \vec{A}_n(\vec{R}) - \nabla_R \xi(\vec{R}), \quad \gamma_n \to \gamma_n + \xi(R(0)) - \xi(R(T)) $$
+            <p>对于闭合回路，由于物理态的单值性要求 $e^{i\xi(R(0))} = e^{i\xi(R(T))}$，故 $\xi(R(0)) - \xi(R(T)) = 2\pi N$。</p>
+
+            <p><strong>闭合回路的 Stokes 定理形式与 Berry Curvature：</strong></p>
+            $$ \gamma_n = \oint_C \vec{A}_n(\vec{R}) \cdot d\vec{R} = \iint_S d\vec{S} \cdot \left[ \nabla \times \vec{A}_n(\vec{R}) \right] = i \iint_S dS_i \epsilon_{ijk} \nabla_j \langle n | \nabla_k | n \rangle $$
+            <p>定义 <strong>Berry Curvature (贝里曲率张量)</strong>：</p>
+            $$ F_{jk} = \frac{\partial}{\partial R_j} A_k - \frac{\partial}{\partial R_k} A_j = i[\langle \nabla_j n | \nabla_k n \rangle - \langle \nabla_k n | \nabla_j n \rangle] $$
+            <p>用矢量形式 $\vec{B}_n$ 表示（等效磁场）：</p>
+            $$ \gamma_n = -\text{Im} \left\{ \iint_S d\vec{S} \cdot \langle \vec{\nabla} n | \times | \vec{\nabla} n \rangle \right\} \implies \vec{B}_n = -\text{Im}\{ \langle \vec{\nabla} n | \times | \vec{\nabla} n \rangle \} $$
+
+            <!-- 电磁学对应与实用公式 -->
+            <p><strong>这些量与电磁场的对应关系：</strong></p>
+            <ul>
+                <li>Berry vector potential: $\vec{A}_n = i \langle n | \nabla_R | n \rangle \longleftrightarrow \vec{A}$ (磁矢势)</li>
+                <li>Berry phase: $\gamma_n = \oint_C \vec{A}_n \cdot d\vec{R} \longleftrightarrow \Phi$ (磁通量)</li>
+                <li>Berry curvature: $F_{jk} = \partial_j(A_n)_k - \partial_k(A_n)_j \longleftrightarrow \vec{B}$ (磁场)</li>
+            </ul>
+
+            <p><strong>计算 Berry Curvature 的最强实用公式（不依赖规范选择）：</strong><br>
+            利用微扰论公式 $\langle m | \nabla n \rangle = \frac{\langle m | \nabla H | n \rangle}{E_n - E_m}$，代入 $\vec{B}_n$ 定义并插入完备基：</p>
+            $$ \vec{B}_n = -\text{Im} \left\{ \sum_{m \neq n} \frac{\langle n | \nabla H | m \rangle \times \langle m | \nabla H | n \rangle}{(E_n - E_m)^2} \right\} $$
+
+            <!-- 4.2 期末对接：二能级系统 -->
+            <h3 style="color: #d84315; border-left-color: #d84315;">4.2 期末对接：二能级系统与磁单极子积分</h3>
+            <p>考虑哈密顿量 $H = \vec{d} \cdot \vec{\sigma}$，其中 $\vec{d} = |\vec{d}|[\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta]$。其矩阵形式、本征值 $E_\pm = \pm |\vec{d}|$ 与本征矢 $|\pm\rangle$ 易求。</p>
+            <p>利用 $\nabla_i H = \sigma_i$，代入上述实用公式求下能级 $|-\rangle$ 的贝里曲率等效磁场：</p>
+            $$
+            \begin{aligned}
+            \vec{B}_- &= -\frac{\text{Im}\{ \langle - | \nabla H | + \rangle \times \langle + | \nabla H | - \rangle \}}{4|\vec{d}|^2} \\
+            &= -\frac{\text{Im}\{ \langle - | \nabla H \times \nabla H | - \rangle \}}{4|\vec{d}|^2} \quad \text{(利用完备性, } |+\rangle\langle+| = I - |-\rangle\langle-| \text{, 自身叉乘为0略去)} \\
+            &= -\frac{\text{Im}\{ \langle - | \epsilon_{ijk} \sigma_i \sigma_j \hat{e}_k | - \rangle \}}{4|\vec{d}|^2} \\
+            &= -\frac{\text{Im}\{ \langle - | i \epsilon_{ijk} \epsilon_{ijm} \sigma_m \hat{e}_k | - \rangle \}}{4|\vec{d}|^2} \quad (\text{利用 Pauli 代数 } \sigma_i \sigma_j = \delta_{ij} + i\epsilon_{ijk}\sigma_k) \\
+            &= -\frac{\text{Im}\{ \langle - | i 2\delta_{km} \sigma_m \hat{e}_k | - \rangle \}}{4|\vec{d}|^2} \\
+            &= -\frac{\text{Im}\{ i \langle - | \vec{\sigma} | - \rangle \}}{2|\vec{d}|^2} = \frac{\vec{n}}{2|\vec{d}|^2} = \frac{\vec{d}}{2|\vec{d}|^3}
+            \end{aligned}
+            $$
+            <p>这正是一个位于原点、强度为 $1/2$ 的<strong>磁单极子场</strong>形式。</p>
+
+            <p><strong>关于整个单位球面积分 $\oiint_S \vec{B} \cdot d\vec{S} = 2\pi$ 的拓扑证明：</strong><br>
+            两个不同规范下的本征态 $|-\rangle_1$（北半球非奇异）和 $|-\rangle_2$（南半球非奇异）之间相差一个规范变换：</p>
+            $$ |-\rangle_2 = |-\rangle_1 e^{i\xi(\vec{R})} \implies \vec{A}_2 = \vec{A}_1 - \nabla_R \xi(\vec{R}), \quad \text{显然此模型中 } \xi(\vec{R}) = \phi $$
+            <p>将球面 $S$ 分为上下半球 $S_1^2$ 和 $S_2^2$，其公共边界为赤道 $\partial S_1^2 = -\partial S_2^2$。利用分片规范和 Stokes 定理：</p>
+            $$
+            \begin{aligned}
+            \oiint_S \vec{B} \cdot d\vec{S} &= \iint_{S_1^2} \vec{B} \cdot d\vec{S} + \iint_{S_2^2} \vec{B} \cdot d\vec{S} \\
+            &= \oint_{\partial S_1^2} \vec{A}_1 \cdot d\vec{l} + \oint_{\partial S_2^2} \vec{A}_2 \cdot d\vec{l} \\
+            &= \oint_{\partial S_1^2} (\vec{A}_1 - \vec{A}_2) \cdot d\vec{l} \\
+            &= \oint_{\partial S_1^2} \nabla_R \xi(\vec{R}) \cdot d\vec{R} \\
+            &= \xi(\phi = 2\pi) - \xi(\phi = 0) = 2\pi N \quad (\text{这里 } N=1)
+            \end{aligned}
+            $$
+
+            <!-- 4.3 A-B 效应与相位 -->
+            <h3>4.3 A-B Effect 与绝热演化的流体力学表述</h3>
+            <p><strong>AB 效应与 Berry 相位：</strong><br>
+            令 $\tilde{\vec{A}}_{x_0} = -\frac{e}{\hbar} \vec{A}(x_0)$，即可通过 Berry Phase 的定义推出 AB 效应的相位差：</p>
+            $$ \gamma = \oint_C d\vec{l} \cdot \tilde{\vec{A}}_{x_0} = -\frac{e}{\hbar} \Psi_C = -2\pi \frac{\Psi_C}{\Psi_0}, \quad \text{其中磁通量子 } \Psi_0 = \frac{2\pi\hbar}{e} $$
+            <p><em>多提一嘴：经典力学方程中出现的是 $\vec{E}$ 和 $\vec{B}$，而量子力学中则是对应的电势 $\phi$ 与磁矢势 $\vec{A}$。</em></p>
+
+            <p><strong>波函数与经典作用量的对应（流体力学唯象理论）：</strong><br>
+            已知概率流密度 $J = \frac{i\hbar}{2m}[\psi\nabla\psi^* - \psi^*\nabla\psi]$。设波函数 $\psi(r) = \sqrt{\rho(r)}e^{i\xi(r)}$，代入 $J$ 中得：</p>
+            $$ J = \frac{\hbar}{m} \rho(r) \nabla\xi(r) $$
+            <p>对比经典作用量 $dS = p dq - H dt \implies J = \frac{1}{m} \rho p = \rho v$。将其相位与经典作用量对应，即 $\xi \sim \frac{S}{\hbar}$。<br>
+            这表明，只要知道系统的概率密度 $\rho(r)$ 与流密度场 $J(r)$，就能完全构建出对应的量子态波函数。</p>
+
+            <div class="kp-box">
+                <strong>高频考点提示：</strong><br>
+                讲义中 4.2 节的推导非常精彩。遇到求含时磁场中二能级系统的 Berry 曲率大题，强烈建议使用 $\vec{B}_n = -\text{Im} \sum \dots$ 这个实用公式，直接利用泡利矩阵代数在两三步内化简出结果，既不容易出错，又显得非常专业（避开了繁琐的本征态偏导运算）。
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+<!-- ⬇️ 模块开始：知识点总结第五部分 ⬇️ -->
+    <section id="summary-05">
+        <div class="card">
+            <h2>Landau Levels (朗道能级) 与简并度本质</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本节简要总结了二维电子气在匀强磁场中的朗道能级简并度公式，并从 A-B 效应（几何相位）的全新视角给出了深刻的物理图景解释。
+            </div>
+
+            <!-- 5 Landau Levels -->
+            <h3>5 朗道能级简并度的拓扑图像</h3>
+            <p><strong>重点公式：</strong> 朗道能级的宏观简并度为：</p>
+            $$ N = \frac{B A}{\Psi_0} $$
+            <p>其中：</p>
+            <ul>
+                <li>$B$ 是垂直穿过平面的外加匀强磁场。</li>
+                <li>$A$ 是二维样品的面积，因此 $BA = \Phi$ 即为穿过样品的总磁通量。</li>
+                <li>$\Psi_0$ 是**磁通量子 (Magnetic Flux Quantum)**，其大小为 $\Psi_0 = \frac{2\pi\hbar}{e} = \frac{h}{e}$。</li>
+            </ul>
+
+            <p><strong>A-B 效应与简并度的物理关联：</strong></p>
+            <p>如果想起前面的 AB 效应的 Berry Phase，就能发现这二者的深刻关联了：</p>
+            <p style="color: var(--hust-red); font-weight: 600; font-size: 1.1rem; line-height: 1.8; border-left: 4px solid var(--hust-red); padding-left: 15px; background: #fff5f5; padding: 15px; border-radius: 4px;">
+                一个电子的 Lorentz 回旋是绕着“一个磁通量子”来完成的。在这一回旋的一个周期中，它刚好可以积累到 $2\pi$ 的 AB 相位（拓扑相位），从而满足“相干相长”的驻波条件。
+            </p>
+            <p>因此，整个面积 $A$ 内总共有多少个磁通量子 $\Psi_0$，就能容纳多少个互不干涉的独立回旋轨道，这也就是该朗道能级简并度 $N$ 的物理本质。</p>
+
+            <div class="kp-box">
+                <strong>考场实战对接：</strong><br>
+                在考试中如果遇到简答题：“请说明朗道能级高度简并的原因”，除了用传统的 Landau 规范（平面波结合谐振子势，解出简并度 $L_x/ \Delta X_0$）来硬核推导外，**如果能写出上面这段红字部分的 A-B 效应相干相长的解释**，绝对是加分项，能让阅卷老师看出你对量子力学底层逻辑的深刻理解！
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+<!-- ⬇️ 模块开始：知识点总结第六部分 ⬇️ -->
+    <section id="summary-06">
+        <div class="card">
+            <h2散射理论 (Scattering Theory) 核心概念与期末对接</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本节总结了散射截面的物理图像、散射定态的渐进行为、Lippmann-Schwinger 方程以及核心计算工具——Born 近似。文末的“期末对接”给出了高频考点汤川势的完整计算流程。
+            </div>
+
+            <!-- 6.1 基本概念 -->
+            <h3>6.1 散射截面与散射定态</h3>
+            <p><strong>什么是微分散射截面？</strong><br>
+            把在方位角 $d\Omega$ 上探测到的粒子，归结到无穷远处的垂直截面上的一块面积微元上，这一块面积微元的大小即是所谓的微分散射截面。</p>
+            <p><strong>对微分散射截面的理解：</strong><br>
+            对微分散射截面求积分就可以得到总的散射截面 $\sigma_T$，它衡量了一个势场会对周围多大距离的粒子产生显著的相互作用。</p>
+
+            <p><strong>什么是散射定态及物理意义？</strong><br>
+            散射定态是满足在无穷远处的定态薛定谔方程 $[\nabla^2 + k^2 - u(r)]\psi(r) = 0$，同时符合物理问题所要求的渐进行为的那些解；其公式是：</p>
+            $$ v_k^{\text{diff}}(r) \xrightarrow{r \to \infty} e^{ikz} + f_k(\theta, \phi) \frac{e^{ikr}}{r} $$
+            <p>其中第一项表示平面波（入射波），第二项表示散射波，$f_k(\theta, \phi)$ 表示散射振幅。其中分母为 $r$ 保证了（向外辐射过程中的）概率流密度守恒。</p>
+
+            <!-- 6.2 L-S 方程与 Born 近似 -->
+            <h3>6.2 Lippmann-Schwinger 方程与 Born 近似</h3>
+            <p><strong>Lippmann-Schwinger 方程的形式：</strong></p>
+            $$ |\psi^+\rangle = |i\rangle + \sum_{n=1}^\infty \left[ \frac{1}{E_i - H_0 + i\hbar\varepsilon} V \right]^n |i\rangle $$
+            <p>其坐标表象下的积分方程为：</p>
+            $$ v_k^{\text{diff}}(r) = e^{i\vec{k}_i \cdot \vec{r}} + \int d^3r_1 G_+(r - r_1) u(r_1) v_k^{\text{diff}}(r_1) $$
+            <p>由格林函数在无穷远处的近似行为：$G_+(r - r') = -\frac{1}{4\pi}\frac{e^{ik|r - r'|}}{|r - r'|} \xrightarrow{r \to \infty} -\frac{e^{ikr}}{4\pi r}e^{-ik\hat{u} \cdot r'}$，可以提取出精确的散射振幅公式：</p>
+            $$ f_k(\theta, \phi) = -\frac{1}{4\pi} \int d^3r' e^{-i\vec{k}_d \cdot \vec{r}'} u(r') v_k^{\text{diff}}(r') $$
+            
+            <p><strong>Born 近似：</strong><br>
+            对 Lippmann-Schwinger 方程只取第一项的结果（即将积分内的真实波函数 $v_k^{\text{diff}}$ 替换为入射平面波 $e^{i\vec{k}_i \cdot \vec{r}'}$），得到近似下的散射振幅：</p>
+            $$ f_k^{(B)}(\theta, \phi) = -\frac{1}{4\pi} \int d^3r_1 e^{-i\vec{K} \cdot \vec{r}_1} u(r_1) = -\frac{\mu}{2\pi\hbar^2} \int d^3r_1 e^{-i\vec{K} \cdot \vec{r}_1} V(r_1) $$
+            <p>其中动量转移 $\vec{K} = \vec{k}_d - \vec{k}_i$，大小为 $K = 2k\sin\frac{\theta}{2}$。<br>
+            由此可见，在 Born 近似下，有效微分散射截面正比于势场傅里叶变换的模平方。</p>
+
+            <p style="color: var(--hust-red); font-weight: 600; padding: 10px; background: #fff5f5; border-radius: 4px;">
+                <strong>💡 L-S 方程与惠更斯原理关联：</strong><br>
+                积分式 $\int d^3r_1 G_+(r - r_1) u(r_1) e^{i\vec{k}_i \cdot \vec{r}_1}$ 表示的是在 $r_1$ 处的平面波被“散射介质” $u(r_1)$ 诱导出的子波源发出的球面波 $G_+(r - r_1)$ 的叠加，子波源的初相位是 $e^{i\vec{k}_i \cdot \vec{r}_1}$，而引起的振幅正比于 $u(r_1)$，这一解释与波动光学中的惠更斯原理完全对照。
+            </p>
+
+            <!-- 6.3 期末对接：汤川势 -->
+            <h3 style="color: #d84315; border-left-color: #d84315;">6.3 期末对接：Yukawa 势的 Born 近似</h3>
+            <p>考虑势场 $V(r) = V_0 \frac{e^{-ar}}{r}, \; a > 0$。其散射振幅的计算过程（极坐标展开法）必须熟练掌握：</p>
+            $$
+            \begin{aligned}
+            f_k^{(B)}(\theta, \phi) &= -\frac{\mu}{2\pi\hbar^2} \int d^3r_1 e^{-i\vec{K} \cdot \vec{r}_1} V_0 \frac{e^{-ar_1}}{r_1} \\
+            &= -\frac{\mu}{2\pi\hbar^2} \int dr r^2 \sin\theta_1 d\theta_1 d\phi_1 \, V_0 \frac{e^{-ar}}{r} e^{-iKr\cos\theta_1} \\
+            &= -\frac{\mu V_0}{\hbar^2} \int dr r^2 \frac{e^{-ar}}{r} \frac{e^{iKr} - e^{-iKr}}{iKr} \\
+            &= -\frac{\mu V_0}{iK\hbar^2} \int_0^\infty dr \, e^{-ar} [e^{iKr} - e^{-iKr}] \\
+            &= -\frac{\mu V_0}{iK\hbar^2} \left[ \frac{1}{a - iK} - \frac{1}{a + iK} \right] \\
+            &= -\frac{\mu V_0}{iK\hbar^2} \frac{2iK}{a^2 + K^2} = -\frac{2\mu V_0}{\hbar^2 (a^2 + K^2)} \\
+            &= -\frac{2\mu V_0}{\hbar^2 \left( a^2 + 4k^2\sin^2\left(\frac{\theta}{2}\right) \right)}
+            \end{aligned}
+            $$
+            <p>从而微分散射截面为 $\sigma_k^{(B)}(\theta) = |f_k^{(B)}(\theta, \phi)|^2$，总散射截面为 $\sigma^{(B)} = \iint \sigma_k^{(B)}(\theta) d\Omega$。</p>
+
+            <div class="kp-box">
+                <strong>防坑指南：</strong><br>
+                在计算汤川势或库仑势的散射振幅时，$\int_0^\infty e^{-\alpha r}dr = \frac{1}{\alpha}$ 这个基本积分公式用得最多。注意在推导中提取常数时的符号（负号）不要丢了。最后当 $a \to 0$ 时，这个公式将直接退化为卢瑟福散射截面。
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+<!-- ⬇️ 模块开始：知识点总结第七部分 ⬇️ -->
+    <section id="summary-07">
+        <div class="card">
+            <h2>Path Integral (路径积分) 与传播子</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本节总结了费曼路径积分的核心形式。重点给出了自由粒子传播子的完整推导过程（利用动量完备基与高斯积分），并演示了如何利用拉格朗日量中的电磁相互作用项，从路径积分视角重新推导 A-B 效应的相移。
+            </div>
+
+            <!-- 7 传播子定义 -->
+            <h3>7.1 传播子的定义与基本形式</h3>
+            <p><strong>传播子定义：</strong> 描述粒子从 $(x_a, t_a)$ 传播到 $(x_b, t_b)$ 的概率幅：</p>
+            $$ K(x_b, t_b; x_a, t_a) = \langle x_b | e^{-\frac{i}{\hbar}H(t_b-t_a)} | x_a \rangle $$
+
+            <p><strong>哈密顿形式的路径积分：</strong> 包含坐标和动量的相空间路径积分：</p>
+            $$ K(x_b, t_b; x_a, t_a) = \int \mathcal{D}[x(t)] \int \mathcal{D}[p(t)] \exp\left\{ \frac{i}{\hbar} \int dt \left[ p(t)\dot{x}(t) - H(p(t), x(t)) \right] \right\} $$
+
+            <p><strong>拉格朗日形式的路径积分：</strong> 动量积分掉后得到的位形空间路径积分：</p>
+            $$ K(x_b, t_b; x_a, t_a) = \int \mathcal{D}[x(t)] \exp\left\{ \frac{i}{\hbar} \int dt \left[ \frac{1}{2}m\dot{x}^2 - V(x) \right] \right\} = \int \mathcal{D}[x(t)] e^{\frac{i}{\hbar}S[x(t)]} $$
+
+            <!-- 7.1 期末对接 -->
+            <h3 style="color: #d84315; border-left-color: #d84315;">7.2 期末对接一：自由粒子的传播子推导</h3>
+            <p>对于自由粒子 $H = \frac{\hat{p}^2}{2m}$，插入完备动量基 $\int dp |p\rangle\langle p| = 1$：</p>
+            $$
+            \begin{aligned}
+            K(x_b, t_b; x_a, t_a) &= \langle x_b | e^{-\frac{i}{\hbar}\frac{\hat{p}^2}{2m}(t_b-t_a)} | x_a \rangle \\
+            &= \int dp \, \langle x_b | e^{-\frac{ip^2}{2m\hbar}(t_b-t_a)} | p \rangle \langle p | x_a \rangle
+            \end{aligned}
+            $$
+            <p>代入动量本征态的坐标表示 $\langle x|p \rangle = \frac{1}{\sqrt{2\pi\hbar}} e^{ipx/\hbar}$：</p>
+            $$ K = \frac{1}{2\pi\hbar} \int dp \, \exp\left[ -\frac{i}{\hbar}p(x_a - x_b) \right] \exp\left[ -\frac{ip^2}{2m\hbar}(t_b - t_a) \right] $$
+            <p>利用高斯积分公式 $\int_{-\infty}^{+\infty} dx e^{iax^2} = \sqrt{\frac{i\pi}{a}}$，对指数上的 $p$ 进行<strong>配方</strong>：</p>
+            $$
+            \begin{aligned}
+            K &= \frac{1}{2\pi\hbar} \int dp \exp\left\{ -\frac{i(t_b - t_a)}{2m\hbar} \left[ \left( p - \frac{x_b - x_a}{t_b - t_a}m \right)^2 - \left( \frac{x_b - x_a}{t_b - t_a}m \right)^2 \right] \right\} \\
+            &= \frac{1}{2\pi\hbar} \sqrt{\frac{2im\pi\hbar}{t_a - t_b}} \exp\left[ \frac{i}{\hbar} \frac{m(x_b - x_a)^2}{2(t_b - t_a)} \right] \\
+            &= \sqrt{\frac{m}{2\pi\hbar i(t_b - t_a)}} \exp\left[ \frac{im(x_b - x_a)^2}{2\hbar(t_b - t_a)} \right]
+            \end{aligned}
+            $$
+            <p><em>（注：指数项正好是 $e^{iS_{\text{cl}}/\hbar}$，其中 $S_{\text{cl}}$ 是自由粒子的经典作用量 $\frac{1}{2}mv^2 t$）</em></p>
+
+            <!-- 期末对接二：路径积分与 AB 效应 -->
+            <h3 style="color: #d84315; border-left-color: #d84315;">7.3 期末对接二：利用路径积分解释 A-B 效应</h3>
+            <p>当考虑一个螺线管所产生的矢势时，经典拉格朗日量发生改变（最小耦合）：</p>
+            $$ L_{\text{cl}} = \frac{1}{2}m\left(\frac{dx}{dt}\right)^2 \xrightarrow{\text{AB-effect}} \frac{1}{2}m\left(\frac{dx}{dt}\right)^2 - e \frac{dx}{dt} \cdot \vec{A} $$
+            <p>从而传播子中的相位因子多出了一项矢势沿路径的积分：</p>
+            $$ e^{\frac{i}{\hbar}S} \longrightarrow e^{\frac{i}{\hbar}S_{\text{cl}}} \exp\left[ -\frac{ie}{\hbar} \int_{x_a}^{x_b} \vec{A} \cdot d\vec{l} \right] $$
+            <p>对经过螺线管两侧的闭合路径 $C$（如双缝干涉的上下两条路径 $P_{\text{up}}$ 和 $P_{\text{down}}$），到达屏幕同一点的传播子为两条路径的叠加：</p>
+            $$ K \sim \int_{\text{up}} \mathcal{D}[x(t)] e^{\frac{i}{\hbar}S_{\text{cl}}} e^{-\frac{ie}{\hbar} \int_{\text{up}} \vec{A}\cdot d\vec{l}} + \int_{\text{down}} \mathcal{D}[x(t)] e^{\frac{i}{\hbar}S_{\text{cl}}} e^{-\frac{ie}{\hbar} \int_{\text{down}} \vec{A}\cdot d\vec{l}} $$
+            <p>提取相对相位差（设下路径减去上路径构成顺时针闭合回路 $C$）：</p>
+            $$ \Delta \text{Phase} \implies e^{-\frac{ie}{\hbar} \left( \int_{\text{down}} \vec{A}\cdot d\vec{l} - \int_{\text{up}} \vec{A}\cdot d\vec{l} \right)} = e^{-\frac{ie}{\hbar} \oint_C \vec{A}\cdot d\vec{l}} = e^{-i\frac{e}{\hbar}\Psi_C} $$
+            <p>由此可得附加的干涉相移为：</p>
+            $$ \gamma = -\frac{e}{\hbar} \Psi_C = -2\pi \frac{\Psi_C}{\Psi_0}, \quad \left( \Psi_0 = \frac{2\pi\hbar}{e} \right) $$
+            <p>结论：这一额外的局域相位于前面用 Berry Phase 求出的结果完全相同，故通过路径积分的方法也可以完美解释 A-B 效应的物理起源。</p>
+
+            <div class="kp-box">
+                <strong>高频考点提示：</strong><br>
+                1. <strong>高斯积分技巧：</strong> 在推导自由粒子（或谐振子）传播子时，遇到 $\int dp \, e^{-i a p^2 - i b p}$ 这种形式，一定要熟练掌握<strong>“配完全平方式”</strong>然后再套用标准高斯积分 $\int e^{-ax^2}dx = \sqrt{\pi/a}$ 的计算流程。<br>
+                2. <strong>半经典近似：</strong> 路径积分公式中的 $e^{iS/\hbar}$ 很好地解释了经典力学：当 $\hbar \to 0$ 时，相位震荡极快，只有使得 $\delta S = 0$（即满足经典欧拉-拉格朗日方程）的经典路径周围才不会发生相消干涉，这就是<strong>最小作用量原理</strong>的量子起源。
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+<!-- ⬇️ 模块开始：知识点总结第八部分 ⬇️ -->
+    <section id="summary-08">
+        <div class="card">
+            <h2>Fermi 黄金规则与自发辐射的量子起源</h2>
+            
+            <div class="problem-box">
+                <strong>章节说明：</strong><br>
+                本节利用相互作用绘景下的时间相关函数（Correlation Function）重新推导了 Fermi 黄金规则。并通过一个原子的偶极跃迁与热辐射场耦合的具体模型，在数学上严格揭示了“自发辐射”来源于量子化电磁场的非对易性（真空涨落）。
+            </div>
+
+            <!-- 8.1 跃迁概率与关联函数 -->
+            <h3>8.1 跃迁速率与关联函数</h3>
+            <p><strong>跃迁概率：</strong></p>
+            $$ P_{a \to b}(t) = |X_{ba}|^2 t \int_{-\infty}^{+\infty} dt_1 e^{-i\omega_{ba}t_1} \langle \tilde{X}_B(t_1)\tilde{X}_B(0) \rangle = t \langle X_{\omega_{ba}}^2 \rangle |X_{ba}|^2 $$
+            <p>其中功率谱密度（关联函数的傅里叶变换）定义为：$\langle X_\omega^2 \rangle = \int_{-\infty}^{+\infty} d\tau e^{i\omega\tau} \langle \tilde{X}_B(\tau)\tilde{X}_B(0) \rangle$。</p>
+            <p>从而得到恒定的<strong>跃迁速率 (Transition Rate)</strong>：</p>
+            $$ \Gamma_{a \to b} = |X_{ba}|^2 \langle X_{\omega_{ba}}^2 \rangle $$
+            <p><em>注：对字母上方有波浪线 $\tilde{X}_B$ 表示是在相互作用表象下的算符。</em></p>
+
+            <!-- 8.2 偶极相互作用模型 -->
+            <h3>8.2 偶极相互作用与光场算符演化</h3>
+            <p>现考虑系统（原子）与热浴（光场）的哈密顿量：</p>
+            $$ H_S = \frac{1}{2}\omega\sigma_z, \quad H_B = \sum_k \omega_k a_k^\dagger a_k $$
+            <p>相互作用项对应于偶极相互作用 $H_{\text{int}} = -\vec{d} \cdot \vec{E}$，其中：</p>
+            $$ X_S = \sigma_x \longleftrightarrow \vec{d}, \quad X_B = \sum_k g_k(a_k + a_k^\dagger) \longleftrightarrow \vec{E} $$
+            <p><em>之所以选择 $\sigma_x$ 是因为宇称规律导致 $\langle nlm|d|nlm \rangle = 0$（对角项为零，只能发生能级间的跃迁）。</em></p>
+            
+            <p>据此，根据超算符公式 $e^A B e^{-A} = e^{[A, \cdot]}B \implies e^{i\omega t a^\dagger a} a e^{-i\omega t a^\dagger a} = a e^{-i\omega t}$，可得光场算符在相互作用绘景下的演化：</p>
+            $$ \tilde{X}_B(t) = \sum_k g_k \left[ a_k e^{-i\omega_k t} + a_k^\dagger e^{i\omega_k t} \right] $$
+
+            <p><strong>计算关联函数 $\langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle$：</strong></p>
+            <p>将算符代入，由于热平衡态下非粒子数守恒的交叉项（如 $aa$ 和 $a^\dagger a^\dagger$）期望值为 $0$，只有 $a a^\dagger$ 和 $a^\dagger a$ 存活：</p>
+            $$
+            \begin{aligned}
+            \langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle &= \sum_{k_1, k_2} g_{k_1} g_{k_2} \langle \left[ a_{k_1} e^{-i\omega_{k_1}t} + a_{k_1}^\dagger e^{i\omega_{k_1}t} \right] \left[ a_{k_2} + a_{k_2}^\dagger \right] \rangle \\
+            &= \sum_{k_1} |g_{k_1}|^2 \left[ \langle a_{k_1} a_{k_1}^\dagger \rangle e^{-i\omega_{k_1}t} + \langle a_{k_1}^\dagger a_{k_1} \rangle e^{i\omega_{k_1}t} \right]
+            \end{aligned}
+            $$
+            <p>利用玻色子对易关系 $[a, a^\dagger] = 1 \implies a a^\dagger = a^\dagger a + 1$，且热平衡光子数 $\langle a_k^\dagger a_k \rangle = N_{\text{th}}(k_1)$：</p>
+            $$ \langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle = \sum_{k_1} |g_{k_1}|^2 \left[ (N_{\text{th}}(k_1) + 1) e^{-i\omega_{k_1}t} + N_{\text{th}}(k_1) e^{i\omega_{k_1}t} \right] $$
+
+            <!-- 8.3 傅里叶变换与自发辐射 -->
+            <h3 style="color: #d84315; border-left-color: #d84315;">8.3 谱函数与自发辐射的单向性证明</h3>
+            <p>对关联函数进行傅里叶变换求 $\langle X_\omega^2 \rangle$（利用 $\int dt e^{i(\omega - \omega_k)t} = 2\pi\delta(\omega - \omega_k)$）：</p>
+            $$
+            \begin{aligned}
+            \langle X_\omega^2 \rangle &= \int_{-\infty}^{+\infty} e^{i\omega t} \langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle dt \\
+            &= \sum_k 2\pi |g_k|^2 \left[ (N_{\text{th}}(k) + 1)\delta(\omega - \omega_k) + N_{\text{th}}(k)\delta(\omega + \omega_k) \right]
+            \end{aligned}
+            $$
+            <p>将求和转化为对频率的积分 $\int d\nu \dots \rho(\nu)$（$\rho(\nu)$ 为态密度）：</p>
+            <ul>
+                <li>当 $\omega > 0$（对应<strong>向下跃迁/发射光子</strong>）：$\langle X_{\omega > 0}^2 \rangle = |g(\omega)|^2 2\pi \rho(\omega) [N_{\text{th}}(\omega) + 1]$</li>
+                <li>当 $\omega < 0$（对应<strong>向上跃迁/吸收光子</strong>）：$\langle X_{\omega < 0}^2 \rangle = |g(-\omega)|^2 2\pi \rho(-\omega) [N_{\text{th}}(-\omega)]$</li>
+            </ul>
+
+            <p><strong>得出上下跃迁概率：</strong></p>
+            $$
+            \begin{cases}
+            P_{\downarrow} = |g(\omega)|^2 2\pi \rho(\omega) [N_{\text{th}}(\omega) + 1] |X_{ba}|^2 \\
+            P_{\uparrow} = |g(-\omega)|^2 2\pi \rho(-\omega) [N_{\text{th}}(-\omega)] |X_{ba}|^2
+            \end{cases}
+            $$
+
+            <p><strong>物理思考：从上下跃迁的区别看自发辐射</strong><br>
+            可以发现二者仅相差一个常数 <strong>“$1$”</strong>。正是由于这个常数，才导致了自发辐射是单向的。</p>
+            <p>不妨考虑一个二能级系统（例如 He-Ne 激光，波长 $\lambda = 6328 \, \text{\AA}$），做一个简单的推导：<br>
+            光子能量对应的特征温度为：$\hbar\omega = k_B T_{\text{trace}} \implies T_{\text{trace}} \approx 10^4 \, \text{K}$。<br>
+            即需要 $10^4 \, \text{K}$ 的高温热辐射才能使其发生显著的受激跃迁。当放置在室温 $T = 300 \, \text{K}$ 时，由平均光子数公式：</p>
+            $$ N_{\text{th}}(\omega) = \frac{1}{e^{\frac{\hbar\omega}{k_B T}} - 1} \approx \frac{1}{e^{\frac{10^4}{10^2}} - 1} \approx 0 $$
+            <p>从而向上跃迁的受激吸收 $P_{\uparrow} \approx 0$。但是对于向下跃迁，因为常数 “$1$” 的存在，即使环境中没有任何光子（绝对零度真空），$P_{\downarrow}$ 依然不为零。这就是处于激发态的原子总是会自发跌落到基态的原因。</p>
+
+            <div class="kp-box">
+                <strong>理论物理的究极浪漫：</strong><br>
+                半经典理论（把原子量子化，把电磁场当经典波）只能推导出受激吸收和受激辐射（正比于 $N_{\text{th}}$），它无法解释自发辐射，激发态在半经典理论下是永远不会衰变的。只有将电磁场也量子化（即引入满足 $[a, a^\dagger]=1$ 的产生湮灭算符），那个多出来的 “$1$” 才会在代数中自然浮现。这个 “$1$” 物理上就代表了<strong>电磁场的真空涨落 (Vacuum Fluctuations)</strong> 刺激了原子的自发辐射！
+            </div>
+            <!-- 答案区域结束 -->
+</section>
+
+
+
+
+
+
+
 
 <section id="dyn-01">
         <div class="card">
@@ -529,6 +1026,7 @@
             </div>
             <!-- 答案区域结束 -->
     </section>
+
 
 <!-- ⬇️ 模块开始：第二题 ⬇️ -->
     <section id="dyn-02">
@@ -1172,7 +1670,7 @@
             
             <div class="sketch-placeholder">
                 [ 🖼️ 插图占位：电子双缝干涉与通电螺线管实验示意图 ]<br>
-                <span style="font-size: 0.85rem;">（若需插入真实图片，请将此 div 替换为 &lt;img src="图.png" width="100%"&gt;）</span>
+                <span style="font-size: 0.85rem;">（eee）</span>
             </div>
 
             <p><strong>实验叙述：</strong> 将无限长通电螺线管垂直放入电子双缝干涉实验的装置（即双缝的后方两干涉路径之间）。此时螺线管内部存在磁场 $\vec{B} \neq 0$，而在螺线管外部电子所经过的区域磁场 $\vec{B} = 0$，但存在磁矢势 $\vec{A} \neq 0$（采用库仑规范 $\nabla \cdot \vec{A} = 0$）。</p>
@@ -1369,7 +1867,7 @@
             <div class="kp-box">
                 <strong>物理图像升华（波动光学类比）：</strong><br>
                 1. <strong>惠更斯原理 (Huygens' Principle)：</strong> 在 Lippmann-Schwinger 方程的积分项 $\int G_+(\vec{r}-\vec{r}') U(\vec{r}') e^{i\vec{k}_i \cdot \vec{r}'} d^3\vec{r}'$ 中，可以看作：在 $\vec{r}'$ 处的势场 $U(\vec{r}')$ 被入射平面波激发，成为了“次波源”。这些次波源发出球面波 $G_+$ 传播到观察点 $\vec{r}$，其初始相位为 $e^{i\vec{k}_i \cdot \vec{r}'}$，振幅正比于 $U(\vec{r}')$。<br>
-                2. <strong>高频衍射极限：</strong> 第 (d) 问算出的球方势阱截面公式中，包含了振荡因子 $[\sin(Ka)-Ka\cos(Ka)]^2$。这在数学和物理上完全等价于光学中的<strong>三维圆球小孔衍射模型</strong>，这正是物质波特性的完美体现！
+                2. <strong>高频衍射极限：</strong> 第 (d) 问算出的球方势阱截面公式中，包含了振荡因子 $[\sin(Ka)-Ka\cos(Ka)]^2$。这在数学和物理上完全等价于光学中的<strong>三维圆球小孔衍射模型</strong>，这正是物质波特性的完美体现。
             </div>
             <!-- 答案区域结束 -->
     </section>
@@ -1456,499 +1954,6 @@
             <!-- 答案区域结束 -->
     </section>
     <!-- ⬆️ 模块结束 ⬆️ -->
-
-<!-- ⬇️ 模块开始：知识点总结第二部分 ⬇️ -->
-    <section id="summary-02">
-        <div class="card">
-            <h2>量子动力学、三大绘景与有效哈密顿量总结</h2>
-            
-            <div class="problem-box">
-                <strong>章节说明：</strong><br>
-                本章总结了量子系统的时间演化规律。重点辨析了薛定谔、海森堡和相互作用三种绘景的异同，并提炼了利用 Dyson 级数处理高频振荡项（求有效 Hamiltonian）及旋波近似（RWA）的核心公式。
-            </div>
-
-            <!-- 节选一：时间演化算符与运动方程 -->
-            <h3>2.1 节选一：时间演化算符与 Ehrenfest 定理</h3>
-            <p><strong>时间演化算符 $U(t, t_0)$ 的三种情况（设 $\hbar = 1$）：</strong></p>
-            <ul>
-                <li>保守体系（Hamiltonian 不显含时间）：
-                    $$ U(t, t_0) = \exp[-iH(t - t_0)] $$
-                </li>
-                <li>Hamiltonian 含时，但在不同时刻对易 $[H(t), H(t')] = 0$：
-                    $$ U(t, t_0) = \exp\left[ -i \int_{t_0}^t H(\tau) d\tau \right] $$
-                </li>
-                <li>Hamiltonian 含时，且 $[H(t), H(t')] \neq 0$（需要 Dyson 级数迭代）：
-                    $$ U(t, t_0) = \mathcal{T} \exp\left[ -i \int_{t_0}^t H(\tau) d\tau \right] $$
-                    <span style="font-size: 0.9rem; color: #666;">（其中 $\mathcal{T}$ 为编时算子，把时间宗量大的 $H$ 放在左边前面）</span>
-                </li>
-            </ul>
-            <p><strong>Heisenberg 运动方程：</strong></p>
-            $$ \frac{d\langle A\rangle}{dt} = \left\langle \frac{\partial A}{\partial t} \right\rangle + \frac{1}{i\hbar} \langle [A, H] \rangle $$
-            <p><strong>Ehrenfest 定理：</strong> 设 $H = \frac{p^2}{2m} + V(R)$，量子期望值满足经典的牛顿运动定律形式：</p>
-            $$ \frac{d\langle R\rangle}{dt} = \frac{1}{i\hbar} \langle [R, H] \rangle = \frac{\langle p\rangle}{m} $$
-            $$ \frac{d\langle p\rangle}{dt} = \frac{1}{i\hbar} \langle [p, H] \rangle = -\langle \nabla V(R) \rangle $$
-
-            <!-- 节选二：三大绘景 -->
-            <h3>2.2 节选二：量子力学绘景 (Pictures)</h3>
-            <p><strong>定义：</strong> 描述系统动力学演化时的形式不同但物理上等价的观点。约定在 $t=t_0$ 时刻三种绘景完全重合：$|\psi^H(0)\rangle = |\psi^S(0)\rangle = |\psi^I(0)\rangle$ 且 $A^H(0) = A^S(0) = A^I(0)$。</p>
-
-            <p><strong>1. 薛定谔绘景 (Schrödinger Picture, S)：态矢量承担演化，算子不演化。</strong></p>
-            $$ |\psi^S(t)\rangle = U(t, t_0)|\psi^S(0)\rangle $$
-            $$ i\frac{\partial U^S(t, t_0)}{\partial t} = H(t)U^S(t, t_0), \quad U^S(t_0, t_0) = 1 $$
-
-            <p><strong>2. 海森堡绘景 (Heisenberg Picture, H)：算子承担演化，态矢量不演化。</strong></p>
-            $$ |\psi^H(t)\rangle = |\psi^H(0)\rangle = |\psi^S(0)\rangle $$
-            $$ A^H(t) = [U(t, t_0)]^\dagger A^S(t) U(t, t_0) $$
-            <p>相应的运动方程：$\frac{d|\psi^H\rangle}{dt} = 0$，且 $\frac{dA^H}{dt} = \frac{\partial A^H}{\partial t} + \frac{1}{i\hbar}[A^H(t), H^H(t)]$。</p>
-
-            <p><strong>3. 相互作用绘景 (Interaction Picture, I)：态和算子各分担一部分演化。</strong></p>
-            <p>设哈密顿量分为自由项与微扰项：$H^S = H_0^S + V^S$。自由演化算子记为 $U_0(t, t_0) = \mathcal{T}\exp[-i \int H_0^S(\tau) d\tau]$。</p>
-            $$ |\psi^I(t)\rangle = U_0^\dagger(t, t_0) |\psi^S(t)\rangle, \quad A^I(t) = U_0^\dagger(t, t_0) A^S(t) U_0(t, t_0) $$
-            <p>相互作用绘景下的时间演化算子 $U^I(t, t_0) = U_0^\dagger(t, t_0) U(t, t_0)$ 满足方程：</p>
-            $$ i\frac{dU^I}{dt} = V^I(t) U^I, \quad \text{其中 } V^I(t) = U_0^\dagger V^S U_0 $$
-            <p>而算子 $A^I$ 的运动方程只由 $H_0^I$ 决定：$\frac{dA^I}{dt} = \frac{\partial A^I}{\partial t} + \frac{1}{i\hbar}[A^I(t), H_0^I(t)]$。</p>
-
-            <p><strong>表象与绘景的区别：</strong><br>
-            表象（Representation）是选定一组 CSCO 的本征基矢，用矩阵来具体表达态和算子；绘景（Picture）不涉及基矢的选择，它讨论的是系统的时间演化如何在态和算子之间进行分配。</p>
-
-            <!-- 节选三：有效哈密顿量与旋波近似 -->
-            <h3>2.3 节选三：有效 Hamiltonian 与旋波近似</h3>
-            
-            <p><strong>Dyson 级数与有效哈密顿量（长期平均）：</strong><br>
-            考虑相互作用绘景下含有快变项的哈密顿量（设 $\hbar = 1$）：</p>
-            $$ H^I = Ae^{-i\omega t} + A^\dagger e^{i\omega t} $$
-            <p>Dyson 级数迭代公式为：$U_n(t) = 1 - i \int_0^t V^I(\tau) U_{n-1}(\tau) d\tau$。求解至二阶并进行长时间平均（滤去快变项）后，对比有效演化算子 $U_2(t) \approx 1 - i H_{\text{eff}}^I t$，可得有效哈密顿量：</p>
-            $$ H_{\text{eff}}^I = \frac{-1}{\omega} [A, A^\dagger] $$
-            <p>推广到多个频率分量 $H^I = \sum_{n=1}^N \left( A_n e^{-i\omega_n t} + A_n^\dagger e^{i\omega_n t} \right)$，其有效哈密顿量为：</p>
-            $$ H_{\text{eff}}^I = \sum_{n=1}^N \frac{-1}{\omega_n} [A_n, A_n^\dagger] $$
-
-            <p><strong>旋波近似 (Rotating Wave Approximation, RWA)：</strong><br>
-            在光与原子相互作用模型中，将快变项（能量不守恒项）去除，只留下慢变项（能量近似守恒项）的处理方法。例如：</p>
-            $$ V = g(a^\dagger + a)(\sigma_- + \sigma_+) \approx g(a^\dagger \sigma_- + a \sigma_+) $$
-            <p>这里去除了反旋波项 $g(a^\dagger \sigma_+ + a\sigma_-)$，因为它们对应同时产生光子和原子激发（或同时湮灭），在物理上是能量高度不守恒的快速振荡项（$\Delta E = \hbar(\omega + \Omega)$），对宏观时间演化贡献趋于零。</p>
-
-            <div class="kp-box">
-                <strong>笔记食用指南：</strong><br>
-                1. <strong>Ehrenfest 定理：</strong> 是量子力学回归经典力学的桥梁。薛定谔方程预言的不仅是概率，在期望值层面它完美复现了牛顿第二定律。<br>
-                2. <strong>相互作用绘景：</strong> 这是处理微扰论和量子光学（如 Jaynes-Cummings 模型）的标准起手式。所有的 Dyson 级数展开都是在相互作用绘景下进行的。<br>
-                3. <strong>有效哈密顿量公式：</strong> $H_{\text{eff}}^I = -\frac{1}{\omega}[A, A^\dagger]$ 是考试秒杀题目的利器！遇到快变外场（如交流 Stark 效应），直接代入此公式可以免去重新积分的痛苦。
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-<!-- ⬇️ 模块开始：知识点总结第三部分 ⬇️ -->
-    <section id="summary-03">
-        <div class="card">
-            <h2>密度矩阵理论 (Density Matrix Theory) 总结</h2>
-            
-            <div class="problem-box">
-                <strong>问题的提出：</strong><br>
-                如何在不能确切知道各个粒子状态的情况下，即基于不完备的知识，对着一体系进行量子力学的描述，而这种描述手段所给出的结果和预言，又要最大限度地体现这些不完备的知识？<br>
-                上述问题归结为：如何对一个整体体系的子体系进行量子力学描述，并由此描述得出相应的局域物理量的正确测量预言。<br>
-                <strong>纠缠 (Entanglement)：</strong> $|\psi(t)\rangle$ 不能写成 $|\psi_S\rangle \otimes |\psi_B\rangle$ 的直积形式。
-            </div>
-
-            <!-- 3.1 & 3.2 量子系综与纯态系综 -->
-            <h3>3.1 & 3.2 量子系综与纯态/混态</h3>
-            <p><strong>量子系综定义：</strong> $N$ 个微观粒子组成的状态集合，集合中粒子处于各种不同的、不一定相互正交的态上。假定集合的分布是：$n_i$ 个粒子处于 $|\psi_i\rangle$，称此集合为一个量子系综，记为 $\varepsilon = \left\{ |\psi_i\rangle, n_i, \sum_i n_i = N \right\}$。</p>
-            <p>当 $N \to \infty$ 时，一般记为经典概率分布：</p>
-            $$ \varepsilon = \left\{ |\psi_i\rangle, P_i, \sum_i P_i = 1 \right\} $$
-            <p><strong>纯态系综：</strong> 如果一个系综中，所有的体系复本都处在同一个量子状态 $|\psi\rangle$ 上，那么这个系统就被称为纯态系综，记为 $\varepsilon = \{ |\psi\rangle, P_{|\psi\rangle}=1 \}$。</p>
-            <p>反之，若干个纯态按一定几率分布进行非相干混合所得到的就是<strong>混态系综</strong>。</p>
-
-            <!-- 3.3 密度矩阵方法 -->
-            <h3>3.3 密度矩阵方法及其性质</h3>
-            <p>理论上不能以同一方式去处理纯态和混态是不完善的，因此引入密度矩阵方法以统一地表示纯态和混态（纯态只有量子相干性；混态包含经典非相干统计 + 量子相干性）。</p>
-            <p><strong>定义：</strong> 一个量子系综 $\varepsilon = \{|\psi_i\rangle, P_i\}$ 对应的密度矩阵为：</p>
-            $$ \rho = \sum_i P_i |\psi_i\rangle\langle\psi_i| $$
-            <p>即其所含纯态的投影算子的权重和。</p>
-            <p><strong>七大核心性质：</strong></p>
-            <ol style="line-height: 2;">
-                <li>$\rho$ 是厄米算符 (Hermitian)。</li>
-                <li>$\mathrm{Tr}\rho = 1$（迹为 1，代表总概率守恒）。</li>
-                <li>$\rho$ 半正定的。</li>
-                <li>物理量期望值：$\langle B \rangle = \mathrm{Tr}(\rho B)$。</li>
-                <li>$\mathrm{Tr}[\rho^2] \le 1$，<strong>取等号表示纯态</strong>。</li>
-                <li>$\rho$ 的运动方程（冯·诺依曼方程）：
-                    $$ \frac{d\rho}{dt} = \frac{1}{i\hbar}[H, \rho] $$
-                </li>
-                <li>密度矩阵的物理意义：在基 $\{|u_n\rangle\}$ 下 $\rho$ 的矩阵元为：
-                    $$ \rho_{nm} = \langle u_n | \left( \sum_i P_i |\psi_i\rangle\langle\psi_i| \right) | u_m \rangle $$
-                    <strong>对角元</strong> $\rho_{nn}$ 为 $|n\rangle$ 上的布居数 (Population)；<br>
-                    <strong>非对角元</strong> $\rho_{nm}$ 表示 $|u_n\rangle$ 和 $|u_m\rangle$ 之间的量子相干项 (Coherence)。
-                </li>
-            </ol>
-
-            <!-- 3.4 约化密度矩阵 -->
-            <h3>3.4 约化密度矩阵 (Reduced Density Matrix)</h3>
-            <p>考虑复合系统 $V = V_1 \otimes V_2$，基矢为 $|\alpha, \beta\rangle = |\alpha\rangle \otimes |\beta\rangle$。约化密度矩阵则是通过<strong>部分迹 (Partial Trace)</strong> 求得：</p>
-            $$ \rho_1 = \mathrm{Tr}_2 \rho, \quad \rho_2 = \mathrm{Tr}_1 \rho $$
-            <p><strong>注：</strong> 一般情况下 $\rho \neq \rho_1 \otimes \rho_2$。这是因为 $\rho_1, \rho_2$ 表述的是体系局部性质，而 $\rho$ 所体现的是整体性质（包括量子纠缠），这些纠缠性质在求部分迹时被损失了（退相干）。</p>
-
-            <!-- 3.5 期末对接 -->
-            <h3 style="color: #d84315; border-left-color: #d84315;">3.5 期末考点对接 (Q&A 速记)</h3>
-            <ul style="line-height: 1.8;">
-                <li><strong>什么是密度矩阵？</strong><br>形式上是纯态投影算符的权重和，公式为 $\rho = \sum_i P_i |\psi_i\rangle\langle\psi_i|$。</li>
-                <li><strong>什么是布洛赫矢量 (Bloch Vector)？</strong><br>球面上的一个单位矢量 $[\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta]$。</li>
-                <li><strong>密度矩阵的经典对应是什么？</strong><br>对应于经典统计力学中的<strong>相空间密度 $\rho(q,p)$</strong>，其运动方程对应于<strong>刘维尔定理 (Liouville's Theorem)</strong>。</li>
-                <li><strong>$\mathrm{Tr}\rho^2 \le 1$ 证明及等式成立代表什么？</strong><br>
-                    $$ \because \rho = \sum_i P_i |\psi_i\rangle\langle\psi_i| \implies \rho^2 = \sum_i P_i^2 |\psi_i\rangle\langle\psi_i| $$
-                    $$ \therefore \mathrm{Tr}\rho^2 = \sum_i P_i^2 \quad \because \sum_i P_i = 1 $$
-                    $$ \implies \mathrm{Tr}\rho^2 = \sum_i P_i^2 \le 1 $$
-                    当等式成立时表示存在某个 $P_i = 1$ 其它为 $0$，即对应的密度矩阵为 $\rho = |\psi_i\rangle\langle\psi_i|$ 是一个<strong>纯态</strong>；反之则存在统计平均，表示的是一个<strong>混态</strong>。
-                </li>
-                <li><strong>对自旋 1/2 粒子的纯态与混态用 Bloch 球描述：</strong><br>
-                    $$ \rho = \frac{1}{2}I + \frac{1}{2}\sum_i n_i \sigma_i $$
-                    其中由 $\mathrm{Tr}\rho^2 \le 1$ 可推出 $\sum_i n_i^2 \le 1$，$\vec{n}$ 即是密度矩阵的布洛赫矢量。布洛赫矢量的分量与泡利矩阵的关系为 $\langle \sigma_i \rangle = n_i$。
-                </li>
-                <li><strong>热力学系综的密度矩阵表示：</strong><br>
-                    微正则系综：$\rho = \frac{1}{\Omega(E)}$ <br>
-                    正则系综：$\rho = \frac{e^{-\beta H}}{Z}, \quad Z = \mathrm{Tr}\left[e^{-\beta H}\right]$
-                </li>
-            </ul>
-
-            <div class="kp-box">
-                <strong>复习划重点：</strong><br>
-                1. <strong>冯·诺依曼方程与海森堡方程的符号差异：</strong> 密度矩阵的运动方程是 $\frac{d\rho}{dt} = \frac{1}{i\hbar}[H, \rho]$，注意这里对易子的顺序与海森堡运动方程 $\frac{dA}{dt} = \frac{1}{i\hbar}[A, H]$ 正好差一个负号！因为 $\rho$ 是态的集合，类似薛定谔演化。<br>
-                2. <strong>迹的操作技巧：</strong> 考试中经常利用循环不变性 $\mathrm{Tr}(ABC) = \mathrm{Tr}(BCA)$ 来化简物理量的期望值 $\langle A \rangle = \mathrm{Tr}(\rho A)$。
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-<!-- ⬇️ 模块开始：知识点总结第四部分 ⬇️ -->
-    <section id="summary-04">
-        <div class="card">
-            <h2>Berry Phase (贝里相位) 与拓扑基础总结</h2>
-            
-            <div class="problem-box">
-                <strong>章节说明：</strong><br>
-                本章梳理了 Berry Phase 的一般理论框架，对比了其与经典电磁学的对应关系。重点总结了如何利用非对角矩阵元计算 Berry Curvature（避开规范选择难题），以及二能级系统（磁单极子模型）的规范连接与拓扑积分推导。
-            </div>
-
-            <!-- 4.1 Berry Phase 一般形式 -->
-            <h3>4.1 Berry Phase、矢势与曲率</h3>
-            <p><strong>一般形式的 Berry Phase：</strong></p>
-            $$ \gamma_n = i \int_{R_i}^{R_f} \langle n | \nabla_R n \rangle \cdot d\vec{R} $$
-            <p><strong>Berry Vector Potential (贝里联络)：</strong> $A_n = i \langle n | \nabla_R | n \rangle$。</p>
-            
-            <p><strong>规范变换 (Gauge Transformation)：</strong><br>
-            当本征态附加上一个与参数 $\vec{R}$ 相关的相位 $|R(t)\rangle \to e^{i\xi(R)}|n(R(t))\rangle$ 时，有：</p>
-            $$ \vec{A}_n \to \vec{A}_n(\vec{R}) - \nabla_R \xi(\vec{R}), \quad \gamma_n \to \gamma_n + \xi(R(0)) - \xi(R(T)) $$
-            <p>对于闭合回路，由于物理态的单值性要求 $e^{i\xi(R(0))} = e^{i\xi(R(T))}$，故 $\xi(R(0)) - \xi(R(T)) = 2\pi N$。</p>
-
-            <p><strong>闭合回路的 Stokes 定理形式与 Berry Curvature：</strong></p>
-            $$ \gamma_n = \oint_C \vec{A}_n(\vec{R}) \cdot d\vec{R} = \iint_S d\vec{S} \cdot \left[ \nabla \times \vec{A}_n(\vec{R}) \right] = i \iint_S dS_i \epsilon_{ijk} \nabla_j \langle n | \nabla_k | n \rangle $$
-            <p>定义 <strong>Berry Curvature (贝里曲率张量)</strong>：</p>
-            $$ F_{jk} = \frac{\partial}{\partial R_j} A_k - \frac{\partial}{\partial R_k} A_j = i[\langle \nabla_j n | \nabla_k n \rangle - \langle \nabla_k n | \nabla_j n \rangle] $$
-            <p>用矢量形式 $\vec{B}_n$ 表示（等效磁场）：</p>
-            $$ \gamma_n = -\text{Im} \left\{ \iint_S d\vec{S} \cdot \langle \vec{\nabla} n | \times | \vec{\nabla} n \rangle \right\} \implies \vec{B}_n = -\text{Im}\{ \langle \vec{\nabla} n | \times | \vec{\nabla} n \rangle \} $$
-
-            <!-- 电磁学对应与实用公式 -->
-            <p><strong>这些量与电磁场的对应关系：</strong></p>
-            <ul>
-                <li>Berry vector potential: $\vec{A}_n = i \langle n | \nabla_R | n \rangle \longleftrightarrow \vec{A}$ (磁矢势)</li>
-                <li>Berry phase: $\gamma_n = \oint_C \vec{A}_n \cdot d\vec{R} \longleftrightarrow \Phi$ (磁通量)</li>
-                <li>Berry curvature: $F_{jk} = \partial_j(A_n)_k - \partial_k(A_n)_j \longleftrightarrow \vec{B}$ (磁场)</li>
-            </ul>
-
-            <p><strong>计算 Berry Curvature 的最强实用公式（不依赖规范选择）：</strong><br>
-            利用微扰论公式 $\langle m | \nabla n \rangle = \frac{\langle m | \nabla H | n \rangle}{E_n - E_m}$，代入 $\vec{B}_n$ 定义并插入完备基：</p>
-            $$ \vec{B}_n = -\text{Im} \left\{ \sum_{m \neq n} \frac{\langle n | \nabla H | m \rangle \times \langle m | \nabla H | n \rangle}{(E_n - E_m)^2} \right\} $$
-
-            <!-- 4.2 期末对接：二能级系统 -->
-            <h3 style="color: #d84315; border-left-color: #d84315;">4.2 期末对接：二能级系统与磁单极子积分</h3>
-            <p>考虑哈密顿量 $H = \vec{d} \cdot \vec{\sigma}$，其中 $\vec{d} = |\vec{d}|[\sin\theta\cos\phi, \sin\theta\sin\phi, \cos\theta]$。其矩阵形式、本征值 $E_\pm = \pm |\vec{d}|$ 与本征矢 $|\pm\rangle$ 易求。</p>
-            <p>利用 $\nabla_i H = \sigma_i$，代入上述实用公式求下能级 $|-\rangle$ 的贝里曲率等效磁场：</p>
-            $$
-            \begin{aligned}
-            \vec{B}_- &= -\frac{\text{Im}\{ \langle - | \nabla H | + \rangle \times \langle + | \nabla H | - \rangle \}}{4|\vec{d}|^2} \\
-            &= -\frac{\text{Im}\{ \langle - | \nabla H \times \nabla H | - \rangle \}}{4|\vec{d}|^2} \quad \text{(利用完备性, } |+\rangle\langle+| = I - |-\rangle\langle-| \text{, 自身叉乘为0略去)} \\
-            &= -\frac{\text{Im}\{ \langle - | \epsilon_{ijk} \sigma_i \sigma_j \hat{e}_k | - \rangle \}}{4|\vec{d}|^2} \\
-            &= -\frac{\text{Im}\{ \langle - | i \epsilon_{ijk} \epsilon_{ijm} \sigma_m \hat{e}_k | - \rangle \}}{4|\vec{d}|^2} \quad (\text{利用 Pauli 代数 } \sigma_i \sigma_j = \delta_{ij} + i\epsilon_{ijk}\sigma_k) \\
-            &= -\frac{\text{Im}\{ \langle - | i 2\delta_{km} \sigma_m \hat{e}_k | - \rangle \}}{4|\vec{d}|^2} \\
-            &= -\frac{\text{Im}\{ i \langle - | \vec{\sigma} | - \rangle \}}{2|\vec{d}|^2} = \frac{\vec{n}}{2|\vec{d}|^2} = \frac{\vec{d}}{2|\vec{d}|^3}
-            \end{aligned}
-            $$
-            <p>这正是一个位于原点、强度为 $1/2$ 的<strong>磁单极子场</strong>形式。</p>
-
-            <p><strong>关于整个单位球面积分 $\oiint_S \vec{B} \cdot d\vec{S} = 2\pi$ 的拓扑证明：</strong><br>
-            两个不同规范下的本征态 $|-\rangle_1$（北半球非奇异）和 $|-\rangle_2$（南半球非奇异）之间相差一个规范变换：</p>
-            $$ |-\rangle_2 = |-\rangle_1 e^{i\xi(\vec{R})} \implies \vec{A}_2 = \vec{A}_1 - \nabla_R \xi(\vec{R}), \quad \text{显然此模型中 } \xi(\vec{R}) = \phi $$
-            <p>将球面 $S$ 分为上下半球 $S_1^2$ 和 $S_2^2$，其公共边界为赤道 $\partial S_1^2 = -\partial S_2^2$。利用分片规范和 Stokes 定理：</p>
-            $$
-            \begin{aligned}
-            \oiint_S \vec{B} \cdot d\vec{S} &= \iint_{S_1^2} \vec{B} \cdot d\vec{S} + \iint_{S_2^2} \vec{B} \cdot d\vec{S} \\
-            &= \oint_{\partial S_1^2} \vec{A}_1 \cdot d\vec{l} + \oint_{\partial S_2^2} \vec{A}_2 \cdot d\vec{l} \\
-            &= \oint_{\partial S_1^2} (\vec{A}_1 - \vec{A}_2) \cdot d\vec{l} \\
-            &= \oint_{\partial S_1^2} \nabla_R \xi(\vec{R}) \cdot d\vec{R} \\
-            &= \xi(\phi = 2\pi) - \xi(\phi = 0) = 2\pi N \quad (\text{这里 } N=1)
-            \end{aligned}
-            $$
-
-            <!-- 4.3 A-B 效应与相位 -->
-            <h3>4.3 A-B Effect 与绝热演化的流体力学表述</h3>
-            <p><strong>AB 效应与 Berry 相位：</strong><br>
-            令 $\tilde{\vec{A}}_{x_0} = -\frac{e}{\hbar} \vec{A}(x_0)$，即可通过 Berry Phase 的定义推出 AB 效应的相位差：</p>
-            $$ \gamma = \oint_C d\vec{l} \cdot \tilde{\vec{A}}_{x_0} = -\frac{e}{\hbar} \Psi_C = -2\pi \frac{\Psi_C}{\Psi_0}, \quad \text{其中磁通量子 } \Psi_0 = \frac{2\pi\hbar}{e} $$
-            <p><em>多提一嘴：经典力学方程中出现的是 $\vec{E}$ 和 $\vec{B}$，而量子力学中则是对应的电势 $\phi$ 与磁矢势 $\vec{A}$。</em></p>
-
-            <p><strong>波函数与经典作用量的对应（流体力学唯象理论）：</strong><br>
-            已知概率流密度 $J = \frac{i\hbar}{2m}[\psi\nabla\psi^* - \psi^*\nabla\psi]$。设波函数 $\psi(r) = \sqrt{\rho(r)}e^{i\xi(r)}$，代入 $J$ 中得：</p>
-            $$ J = \frac{\hbar}{m} \rho(r) \nabla\xi(r) $$
-            <p>对比经典作用量 $dS = p dq - H dt \implies J = \frac{1}{m} \rho p = \rho v$。将其相位与经典作用量对应，即 $\xi \sim \frac{S}{\hbar}$。<br>
-            这表明，只要知道系统的概率密度 $\rho(r)$ 与流密度场 $J(r)$，就能完全构建出对应的量子态波函数。</p>
-
-            <div class="kp-box">
-                <strong>高频考点提示：</strong><br>
-                讲义中 4.2 节的推导非常精彩。遇到求含时磁场中二能级系统的 Berry 曲率大题，强烈建议使用 $\vec{B}_n = -\text{Im} \sum \dots$ 这个实用公式，直接利用泡利矩阵代数在两三步内化简出结果，既不容易出错，又显得非常专业（避开了繁琐的本征态偏导运算）。
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-<!-- ⬇️ 模块开始：知识点总结第五部分 ⬇️ -->
-    <section id="summary-05">
-        <div class="card">
-            <h2>Landau Levels (朗道能级) 与简并度本质</h2>
-            
-            <div class="problem-box">
-                <strong>章节说明：</strong><br>
-                本节简要总结了二维电子气在匀强磁场中的朗道能级简并度公式，并从 A-B 效应（几何相位）的全新视角给出了深刻的物理图景解释。
-            </div>
-
-            <!-- 5 Landau Levels -->
-            <h3>5 朗道能级简并度的拓扑图像</h3>
-            <p><strong>重点公式：</strong> 朗道能级的宏观简并度为：</p>
-            $$ N = \frac{B A}{\Psi_0} $$
-            <p>其中：</p>
-            <ul>
-                <li>$B$ 是垂直穿过平面的外加匀强磁场。</li>
-                <li>$A$ 是二维样品的面积，因此 $BA = \Phi$ 即为穿过样品的总磁通量。</li>
-                <li>$\Psi_0$ 是**磁通量子 (Magnetic Flux Quantum)**，其大小为 $\Psi_0 = \frac{2\pi\hbar}{e} = \frac{h}{e}$。</li>
-            </ul>
-
-            <p><strong>A-B 效应与简并度的物理关联：</strong></p>
-            <p>如果想起前面的 AB 效应的 Berry Phase，就能发现这二者的深刻关联了：</p>
-            <p style="color: var(--hust-red); font-weight: 600; font-size: 1.1rem; line-height: 1.8; border-left: 4px solid var(--hust-red); padding-left: 15px; background: #fff5f5; padding: 15px; border-radius: 4px;">
-                一个电子的 Lorentz 回旋是绕着“一个磁通量子”来完成的。在这一回旋的一个周期中，它刚好可以积累到 $2\pi$ 的 AB 相位（拓扑相位），从而满足“相干相长”的驻波条件。
-            </p>
-            <p>因此，整个面积 $A$ 内总共有多少个磁通量子 $\Psi_0$，就能容纳多少个互不干涉的独立回旋轨道，这也就是该朗道能级简并度 $N$ 的物理本质。</p>
-
-            <div class="kp-box">
-                <strong>考场实战对接：</strong><br>
-                在考试中如果遇到简答题：“请说明朗道能级高度简并的原因”，除了用传统的 Landau 规范（平面波结合谐振子势，解出简并度 $L_x/ \Delta X_0$）来硬核推导外，**如果能写出上面这段红字部分的 A-B 效应相干相长的解释**，绝对是加分项，能让阅卷老师看出你对量子力学底层逻辑的深刻理解！
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-<!-- ⬇️ 模块开始：知识点总结第六部分 ⬇️ -->
-    <section id="summary-06">
-        <div class="card">
-            <h2散射理论 (Scattering Theory) 核心概念与期末对接</h2>
-            
-            <div class="problem-box">
-                <strong>章节说明：</strong><br>
-                本节总结了散射截面的物理图像、散射定态的渐进行为、Lippmann-Schwinger 方程以及核心计算工具——Born 近似。文末的“期末对接”给出了高频考点汤川势的完整计算流程。
-            </div>
-
-            <!-- 6.1 基本概念 -->
-            <h3>6.1 散射截面与散射定态</h3>
-            <p><strong>什么是微分散射截面？</strong><br>
-            把在方位角 $d\Omega$ 上探测到的粒子，归结到无穷远处的垂直截面上的一块面积微元上，这一块面积微元的大小即是所谓的微分散射截面。</p>
-            <p><strong>对微分散射截面的理解：</strong><br>
-            对微分散射截面求积分就可以得到总的散射截面 $\sigma_T$，它衡量了一个势场会对周围多大距离的粒子产生显著的相互作用。</p>
-
-            <p><strong>什么是散射定态及物理意义？</strong><br>
-            散射定态是满足在无穷远处的定态薛定谔方程 $[\nabla^2 + k^2 - u(r)]\psi(r) = 0$，同时符合物理问题所要求的渐进行为的那些解；其公式是：</p>
-            $$ v_k^{\text{diff}}(r) \xrightarrow{r \to \infty} e^{ikz} + f_k(\theta, \phi) \frac{e^{ikr}}{r} $$
-            <p>其中第一项表示平面波（入射波），第二项表示散射波，$f_k(\theta, \phi)$ 表示散射振幅。其中分母为 $r$ 保证了（向外辐射过程中的）概率流密度守恒。</p>
-
-            <!-- 6.2 L-S 方程与 Born 近似 -->
-            <h3>6.2 Lippmann-Schwinger 方程与 Born 近似</h3>
-            <p><strong>Lippmann-Schwinger 方程的形式：</strong></p>
-            $$ |\psi^+\rangle = |i\rangle + \sum_{n=1}^\infty \left[ \frac{1}{E_i - H_0 + i\hbar\varepsilon} V \right]^n |i\rangle $$
-            <p>其坐标表象下的积分方程为：</p>
-            $$ v_k^{\text{diff}}(r) = e^{i\vec{k}_i \cdot \vec{r}} + \int d^3r_1 G_+(r - r_1) u(r_1) v_k^{\text{diff}}(r_1) $$
-            <p>由格林函数在无穷远处的近似行为：$G_+(r - r') = -\frac{1}{4\pi}\frac{e^{ik|r - r'|}}{|r - r'|} \xrightarrow{r \to \infty} -\frac{e^{ikr}}{4\pi r}e^{-ik\hat{u} \cdot r'}$，可以提取出精确的散射振幅公式：</p>
-            $$ f_k(\theta, \phi) = -\frac{1}{4\pi} \int d^3r' e^{-i\vec{k}_d \cdot \vec{r}'} u(r') v_k^{\text{diff}}(r') $$
-            
-            <p><strong>Born 近似：</strong><br>
-            对 Lippmann-Schwinger 方程只取第一项的结果（即将积分内的真实波函数 $v_k^{\text{diff}}$ 替换为入射平面波 $e^{i\vec{k}_i \cdot \vec{r}'}$），得到近似下的散射振幅：</p>
-            $$ f_k^{(B)}(\theta, \phi) = -\frac{1}{4\pi} \int d^3r_1 e^{-i\vec{K} \cdot \vec{r}_1} u(r_1) = -\frac{\mu}{2\pi\hbar^2} \int d^3r_1 e^{-i\vec{K} \cdot \vec{r}_1} V(r_1) $$
-            <p>其中动量转移 $\vec{K} = \vec{k}_d - \vec{k}_i$，大小为 $K = 2k\sin\frac{\theta}{2}$。<br>
-            由此可见，在 Born 近似下，有效微分散射截面正比于势场傅里叶变换的模平方。</p>
-
-            <p style="color: var(--hust-red); font-weight: 600; padding: 10px; background: #fff5f5; border-radius: 4px;">
-                <strong>💡 L-S 方程与惠更斯原理关联：</strong><br>
-                积分式 $\int d^3r_1 G_+(r - r_1) u(r_1) e^{i\vec{k}_i \cdot \vec{r}_1}$ 表示的是在 $r_1$ 处的平面波被“散射介质” $u(r_1)$ 诱导出的子波源发出的球面波 $G_+(r - r_1)$ 的叠加，子波源的初相位是 $e^{i\vec{k}_i \cdot \vec{r}_1}$，而引起的振幅正比于 $u(r_1)$，这一解释与波动光学中的惠更斯原理完全对照。
-            </p>
-
-            <!-- 6.3 期末对接：汤川势 -->
-            <h3 style="color: #d84315; border-left-color: #d84315;">6.3 期末对接：Yukawa 势的 Born 近似</h3>
-            <p>考虑势场 $V(r) = V_0 \frac{e^{-ar}}{r}, \; a > 0$。其散射振幅的计算过程（极坐标展开法）必须熟练掌握：</p>
-            $$
-            \begin{aligned}
-            f_k^{(B)}(\theta, \phi) &= -\frac{\mu}{2\pi\hbar^2} \int d^3r_1 e^{-i\vec{K} \cdot \vec{r}_1} V_0 \frac{e^{-ar_1}}{r_1} \\
-            &= -\frac{\mu}{2\pi\hbar^2} \int dr r^2 \sin\theta_1 d\theta_1 d\phi_1 \, V_0 \frac{e^{-ar}}{r} e^{-iKr\cos\theta_1} \\
-            &= -\frac{\mu V_0}{\hbar^2} \int dr r^2 \frac{e^{-ar}}{r} \frac{e^{iKr} - e^{-iKr}}{iKr} \\
-            &= -\frac{\mu V_0}{iK\hbar^2} \int_0^\infty dr \, e^{-ar} [e^{iKr} - e^{-iKr}] \\
-            &= -\frac{\mu V_0}{iK\hbar^2} \left[ \frac{1}{a - iK} - \frac{1}{a + iK} \right] \\
-            &= -\frac{\mu V_0}{iK\hbar^2} \frac{2iK}{a^2 + K^2} = -\frac{2\mu V_0}{\hbar^2 (a^2 + K^2)} \\
-            &= -\frac{2\mu V_0}{\hbar^2 \left( a^2 + 4k^2\sin^2\left(\frac{\theta}{2}\right) \right)}
-            \end{aligned}
-            $$
-            <p>从而微分散射截面为 $\sigma_k^{(B)}(\theta) = |f_k^{(B)}(\theta, \phi)|^2$，总散射截面为 $\sigma^{(B)} = \iint \sigma_k^{(B)}(\theta) d\Omega$。</p>
-
-            <div class="kp-box">
-                <strong>防坑指南：</strong><br>
-                在计算汤川势或库仑势的散射振幅时，$\int_0^\infty e^{-\alpha r}dr = \frac{1}{\alpha}$ 这个基本积分公式用得最多。注意在推导中提取常数时的符号（负号）不要丢了。最后当 $a \to 0$ 时，这个公式将直接退化为卢瑟福散射截面。
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-<!-- ⬇️ 模块开始：知识点总结第七部分 ⬇️ -->
-    <section id="summary-07">
-        <div class="card">
-            <h2>Path Integral (路径积分) 与传播子</h2>
-            
-            <div class="problem-box">
-                <strong>章节说明：</strong><br>
-                本节总结了费曼路径积分的核心形式。重点给出了自由粒子传播子的完整推导过程（利用动量完备基与高斯积分），并演示了如何利用拉格朗日量中的电磁相互作用项，从路径积分视角重新推导 A-B 效应的相移。
-            </div>
-
-            <!-- 7 传播子定义 -->
-            <h3>7.1 传播子的定义与基本形式</h3>
-            <p><strong>传播子定义：</strong> 描述粒子从 $(x_a, t_a)$ 传播到 $(x_b, t_b)$ 的概率幅：</p>
-            $$ K(x_b, t_b; x_a, t_a) = \langle x_b | e^{-\frac{i}{\hbar}H(t_b-t_a)} | x_a \rangle $$
-
-            <p><strong>哈密顿形式的路径积分：</strong> 包含坐标和动量的相空间路径积分：</p>
-            $$ K(x_b, t_b; x_a, t_a) = \int \mathcal{D}[x(t)] \int \mathcal{D}[p(t)] \exp\left\{ \frac{i}{\hbar} \int dt \left[ p(t)\dot{x}(t) - H(p(t), x(t)) \right] \right\} $$
-
-            <p><strong>拉格朗日形式的路径积分：</strong> 动量积分掉后得到的位形空间路径积分：</p>
-            $$ K(x_b, t_b; x_a, t_a) = \int \mathcal{D}[x(t)] \exp\left\{ \frac{i}{\hbar} \int dt \left[ \frac{1}{2}m\dot{x}^2 - V(x) \right] \right\} = \int \mathcal{D}[x(t)] e^{\frac{i}{\hbar}S[x(t)]} $$
-
-            <!-- 7.1 期末对接 -->
-            <h3 style="color: #d84315; border-left-color: #d84315;">7.2 期末对接一：自由粒子的传播子推导</h3>
-            <p>对于自由粒子 $H = \frac{\hat{p}^2}{2m}$，插入完备动量基 $\int dp |p\rangle\langle p| = 1$：</p>
-            $$
-            \begin{aligned}
-            K(x_b, t_b; x_a, t_a) &= \langle x_b | e^{-\frac{i}{\hbar}\frac{\hat{p}^2}{2m}(t_b-t_a)} | x_a \rangle \\
-            &= \int dp \, \langle x_b | e^{-\frac{ip^2}{2m\hbar}(t_b-t_a)} | p \rangle \langle p | x_a \rangle
-            \end{aligned}
-            $$
-            <p>代入动量本征态的坐标表示 $\langle x|p \rangle = \frac{1}{\sqrt{2\pi\hbar}} e^{ipx/\hbar}$：</p>
-            $$ K = \frac{1}{2\pi\hbar} \int dp \, \exp\left[ -\frac{i}{\hbar}p(x_a - x_b) \right] \exp\left[ -\frac{ip^2}{2m\hbar}(t_b - t_a) \right] $$
-            <p>利用高斯积分公式 $\int_{-\infty}^{+\infty} dx e^{iax^2} = \sqrt{\frac{i\pi}{a}}$，对指数上的 $p$ 进行<strong>配方</strong>：</p>
-            $$
-            \begin{aligned}
-            K &= \frac{1}{2\pi\hbar} \int dp \exp\left\{ -\frac{i(t_b - t_a)}{2m\hbar} \left[ \left( p - \frac{x_b - x_a}{t_b - t_a}m \right)^2 - \left( \frac{x_b - x_a}{t_b - t_a}m \right)^2 \right] \right\} \\
-            &= \frac{1}{2\pi\hbar} \sqrt{\frac{2im\pi\hbar}{t_a - t_b}} \exp\left[ \frac{i}{\hbar} \frac{m(x_b - x_a)^2}{2(t_b - t_a)} \right] \\
-            &= \sqrt{\frac{m}{2\pi\hbar i(t_b - t_a)}} \exp\left[ \frac{im(x_b - x_a)^2}{2\hbar(t_b - t_a)} \right]
-            \end{aligned}
-            $$
-            <p><em>（注：指数项正好是 $e^{iS_{\text{cl}}/\hbar}$，其中 $S_{\text{cl}}$ 是自由粒子的经典作用量 $\frac{1}{2}mv^2 t$）</em></p>
-
-            <!-- 期末对接二：路径积分与 AB 效应 -->
-            <h3 style="color: #d84315; border-left-color: #d84315;">7.3 期末对接二：利用路径积分解释 A-B 效应</h3>
-            <p>当考虑一个螺线管所产生的矢势时，经典拉格朗日量发生改变（最小耦合）：</p>
-            $$ L_{\text{cl}} = \frac{1}{2}m\left(\frac{dx}{dt}\right)^2 \xrightarrow{\text{AB-effect}} \frac{1}{2}m\left(\frac{dx}{dt}\right)^2 - e \frac{dx}{dt} \cdot \vec{A} $$
-            <p>从而传播子中的相位因子多出了一项矢势沿路径的积分：</p>
-            $$ e^{\frac{i}{\hbar}S} \longrightarrow e^{\frac{i}{\hbar}S_{\text{cl}}} \exp\left[ -\frac{ie}{\hbar} \int_{x_a}^{x_b} \vec{A} \cdot d\vec{l} \right] $$
-            <p>对经过螺线管两侧的闭合路径 $C$（如双缝干涉的上下两条路径 $P_{\text{up}}$ 和 $P_{\text{down}}$），到达屏幕同一点的传播子为两条路径的叠加：</p>
-            $$ K \sim \int_{\text{up}} \mathcal{D}[x(t)] e^{\frac{i}{\hbar}S_{\text{cl}}} e^{-\frac{ie}{\hbar} \int_{\text{up}} \vec{A}\cdot d\vec{l}} + \int_{\text{down}} \mathcal{D}[x(t)] e^{\frac{i}{\hbar}S_{\text{cl}}} e^{-\frac{ie}{\hbar} \int_{\text{down}} \vec{A}\cdot d\vec{l}} $$
-            <p>提取相对相位差（设下路径减去上路径构成顺时针闭合回路 $C$）：</p>
-            $$ \Delta \text{Phase} \implies e^{-\frac{ie}{\hbar} \left( \int_{\text{down}} \vec{A}\cdot d\vec{l} - \int_{\text{up}} \vec{A}\cdot d\vec{l} \right)} = e^{-\frac{ie}{\hbar} \oint_C \vec{A}\cdot d\vec{l}} = e^{-i\frac{e}{\hbar}\Psi_C} $$
-            <p>由此可得附加的干涉相移为：</p>
-            $$ \gamma = -\frac{e}{\hbar} \Psi_C = -2\pi \frac{\Psi_C}{\Psi_0}, \quad \left( \Psi_0 = \frac{2\pi\hbar}{e} \right) $$
-            <p>结论：这一额外的局域相位于前面用 Berry Phase 求出的结果完全相同，故通过路径积分的方法也可以完美解释 A-B 效应的物理起源。</p>
-
-            <div class="kp-box">
-                <strong>高频考点提示：</strong><br>
-                1. <strong>高斯积分技巧：</strong> 在推导自由粒子（或谐振子）传播子时，遇到 $\int dp \, e^{-i a p^2 - i b p}$ 这种形式，一定要熟练掌握<strong>“配完全平方式”</strong>然后再套用标准高斯积分 $\int e^{-ax^2}dx = \sqrt{\pi/a}$ 的计算流程。<br>
-                2. <strong>半经典近似：</strong> 路径积分公式中的 $e^{iS/\hbar}$ 很好地解释了经典力学：当 $\hbar \to 0$ 时，相位震荡极快，只有使得 $\delta S = 0$（即满足经典欧拉-拉格朗日方程）的经典路径周围才不会发生相消干涉，这就是<strong>最小作用量原理</strong>的量子起源。
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-<!-- ⬇️ 模块开始：知识点总结第八部分 ⬇️ -->
-    <section id="summary-08">
-        <div class="card">
-            <h2>Fermi 黄金规则与自发辐射的量子起源</h2>
-            
-            <div class="problem-box">
-                <strong>章节说明：</strong><br>
-                本节利用相互作用绘景下的时间相关函数（Correlation Function）重新推导了 Fermi 黄金规则。并通过一个原子的偶极跃迁与热辐射场耦合的具体模型，在数学上严格揭示了“自发辐射”来源于量子化电磁场的非对易性（真空涨落）。
-            </div>
-
-            <!-- 8.1 跃迁概率与关联函数 -->
-            <h3>8.1 跃迁速率与关联函数</h3>
-            <p><strong>跃迁概率：</strong></p>
-            $$ P_{a \to b}(t) = |X_{ba}|^2 t \int_{-\infty}^{+\infty} dt_1 e^{-i\omega_{ba}t_1} \langle \tilde{X}_B(t_1)\tilde{X}_B(0) \rangle = t \langle X_{\omega_{ba}}^2 \rangle |X_{ba}|^2 $$
-            <p>其中功率谱密度（关联函数的傅里叶变换）定义为：$\langle X_\omega^2 \rangle = \int_{-\infty}^{+\infty} d\tau e^{i\omega\tau} \langle \tilde{X}_B(\tau)\tilde{X}_B(0) \rangle$。</p>
-            <p>从而得到恒定的<strong>跃迁速率 (Transition Rate)</strong>：</p>
-            $$ \Gamma_{a \to b} = |X_{ba}|^2 \langle X_{\omega_{ba}}^2 \rangle $$
-            <p><em>注：对字母上方有波浪线 $\tilde{X}_B$ 表示是在相互作用表象下的算符。</em></p>
-
-            <!-- 8.2 偶极相互作用模型 -->
-            <h3>8.2 偶极相互作用与光场算符演化</h3>
-            <p>现考虑系统（原子）与热浴（光场）的哈密顿量：</p>
-            $$ H_S = \frac{1}{2}\omega\sigma_z, \quad H_B = \sum_k \omega_k a_k^\dagger a_k $$
-            <p>相互作用项对应于偶极相互作用 $H_{\text{int}} = -\vec{d} \cdot \vec{E}$，其中：</p>
-            $$ X_S = \sigma_x \longleftrightarrow \vec{d}, \quad X_B = \sum_k g_k(a_k + a_k^\dagger) \longleftrightarrow \vec{E} $$
-            <p><em>之所以选择 $\sigma_x$ 是因为宇称规律导致 $\langle nlm|d|nlm \rangle = 0$（对角项为零，只能发生能级间的跃迁）。</em></p>
-            
-            <p>据此，根据超算符公式 $e^A B e^{-A} = e^{[A, \cdot]}B \implies e^{i\omega t a^\dagger a} a e^{-i\omega t a^\dagger a} = a e^{-i\omega t}$，可得光场算符在相互作用绘景下的演化：</p>
-            $$ \tilde{X}_B(t) = \sum_k g_k \left[ a_k e^{-i\omega_k t} + a_k^\dagger e^{i\omega_k t} \right] $$
-
-            <p><strong>计算关联函数 $\langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle$：</strong></p>
-            <p>将算符代入，由于热平衡态下非粒子数守恒的交叉项（如 $aa$ 和 $a^\dagger a^\dagger$）期望值为 $0$，只有 $a a^\dagger$ 和 $a^\dagger a$ 存活：</p>
-            $$
-            \begin{aligned}
-            \langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle &= \sum_{k_1, k_2} g_{k_1} g_{k_2} \langle \left[ a_{k_1} e^{-i\omega_{k_1}t} + a_{k_1}^\dagger e^{i\omega_{k_1}t} \right] \left[ a_{k_2} + a_{k_2}^\dagger \right] \rangle \\
-            &= \sum_{k_1} |g_{k_1}|^2 \left[ \langle a_{k_1} a_{k_1}^\dagger \rangle e^{-i\omega_{k_1}t} + \langle a_{k_1}^\dagger a_{k_1} \rangle e^{i\omega_{k_1}t} \right]
-            \end{aligned}
-            $$
-            <p>利用玻色子对易关系 $[a, a^\dagger] = 1 \implies a a^\dagger = a^\dagger a + 1$，且热平衡光子数 $\langle a_k^\dagger a_k \rangle = N_{\text{th}}(k_1)$：</p>
-            $$ \langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle = \sum_{k_1} |g_{k_1}|^2 \left[ (N_{\text{th}}(k_1) + 1) e^{-i\omega_{k_1}t} + N_{\text{th}}(k_1) e^{i\omega_{k_1}t} \right] $$
-
-            <!-- 8.3 傅里叶变换与自发辐射 -->
-            <h3 style="color: #d84315; border-left-color: #d84315;">8.3 谱函数与自发辐射的单向性证明</h3>
-            <p>对关联函数进行傅里叶变换求 $\langle X_\omega^2 \rangle$（利用 $\int dt e^{i(\omega - \omega_k)t} = 2\pi\delta(\omega - \omega_k)$）：</p>
-            $$
-            \begin{aligned}
-            \langle X_\omega^2 \rangle &= \int_{-\infty}^{+\infty} e^{i\omega t} \langle \tilde{X}_B(t)\tilde{X}_B(0) \rangle dt \\
-            &= \sum_k 2\pi |g_k|^2 \left[ (N_{\text{th}}(k) + 1)\delta(\omega - \omega_k) + N_{\text{th}}(k)\delta(\omega + \omega_k) \right]
-            \end{aligned}
-            $$
-            <p>将求和转化为对频率的积分 $\int d\nu \dots \rho(\nu)$（$\rho(\nu)$ 为态密度）：</p>
-            <ul>
-                <li>当 $\omega > 0$（对应<strong>向下跃迁/发射光子</strong>）：$\langle X_{\omega > 0}^2 \rangle = |g(\omega)|^2 2\pi \rho(\omega) [N_{\text{th}}(\omega) + 1]$</li>
-                <li>当 $\omega < 0$（对应<strong>向上跃迁/吸收光子</strong>）：$\langle X_{\omega < 0}^2 \rangle = |g(-\omega)|^2 2\pi \rho(-\omega) [N_{\text{th}}(-\omega)]$</li>
-            </ul>
-
-            <p><strong>得出上下跃迁概率：</strong></p>
-            $$
-            \begin{cases}
-            P_{\downarrow} = |g(\omega)|^2 2\pi \rho(\omega) [N_{\text{th}}(\omega) + 1] |X_{ba}|^2 \\
-            P_{\uparrow} = |g(-\omega)|^2 2\pi \rho(-\omega) [N_{\text{th}}(-\omega)] |X_{ba}|^2
-            \end{cases}
-            $$
-
-            <p><strong>物理思考：从上下跃迁的区别看自发辐射</strong><br>
-            可以发现二者仅相差一个常数 <strong>“$1$”</strong>。正是由于这个常数，才导致了自发辐射是单向的。</p>
-            <p>不妨考虑一个二能级系统（例如 He-Ne 激光，波长 $\lambda = 6328 \, \text{\AA}$），做一个简单的推导：<br>
-            光子能量对应的特征温度为：$\hbar\omega = k_B T_{\text{trace}} \implies T_{\text{trace}} \approx 10^4 \, \text{K}$。<br>
-            即需要 $10^4 \, \text{K}$ 的高温热辐射才能使其发生显著的受激跃迁。当放置在室温 $T = 300 \, \text{K}$ 时，由平均光子数公式：</p>
-            $$ N_{\text{th}}(\omega) = \frac{1}{e^{\frac{\hbar\omega}{k_B T}} - 1} \approx \frac{1}{e^{\frac{10^4}{10^2}} - 1} \approx 0 $$
-            <p>从而向上跃迁的受激吸收 $P_{\uparrow} \approx 0$。但是对于向下跃迁，因为常数 “$1$” 的存在，即使环境中没有任何光子（绝对零度真空），$P_{\downarrow}$ 依然不为零。这就是处于激发态的原子总是会自发跌落到基态的原因。</p>
-
-            <div class="kp-box">
-                <strong>理论物理的究极浪漫：</strong><br>
-                半经典理论（把原子量子化，把电磁场当经典波）只能推导出受激吸收和受激辐射（正比于 $N_{\text{th}}$），它无法解释自发辐射，激发态在半经典理论下是永远不会衰变的。只有将电磁场也量子化（即引入满足 $[a, a^\dagger]=1$ 的产生湮灭算符），那个多出来的 “$1$” 才会在代数中自然浮现。这个 “$1$” 物理上就代表了<strong>电磁场的真空涨落 (Vacuum Fluctuations)</strong> 刺激了原子的自发辐射！
-            </div>
-            <!-- 答案区域结束 -->
-</section>
-
-
 
 
 
